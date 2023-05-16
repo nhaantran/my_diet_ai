@@ -20,6 +20,13 @@ class ApplicationController extends GetxController {
     pageController.jumpToPage(index);
   }
 
+  void addFoodNavigation() {
+    Get.toNamed(AppRoutes.Food);
+    //var data = await Get.toNamed(AppRoutes.Food);
+
+    //Get.to(AppRoutes.Food);
+  }
+
   @override
   void onInit() {
     super.onInit();

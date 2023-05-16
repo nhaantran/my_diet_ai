@@ -52,6 +52,9 @@ class AppColors {
   static const Color brand05 = Color(0xff2186ab);
   static const Color brand06 = Color(0xff31abd8);
   static const Color brand07 = Color(0xff7ecbe7);
+  static const Color brand08 = Color(0xffa9dcef);
+  static const Color brand09 = Color(0xffd4eef7);
+  static const Color brand10 = Color(0xffeaf6fb);
   static const Color success = Color(0xff4ed095);
   static const Color neutral = Color(0xff4b92d4);
   static const Color warning = Color(0xffeea63a);

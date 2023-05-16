@@ -8,6 +8,7 @@ import 'package:my_diet/view/home/homepage.dart';
 
 import '../../common/values/colors.dart';
 import '../daily/dailypage.dart';
+import '../food/foodpage.dart';
 import 'applicationcontroller.dart';
 
 class ApplicationPage extends GetView<ApplicationController> {
@@ -24,13 +25,11 @@ class ApplicationPage extends GetView<ApplicationController> {
       children: [
         HomePage(),
         DailyPage(),
-
         Container(),
-
-        Center(
-          child: Text("4"),
-        ),
-        //FoodsPage(),
+        // Center(
+        //   child: Text("4"),
+        // ),
+        FoodPage(),
         Center(
           child: Text("5"),
         ),
@@ -67,10 +66,10 @@ class ApplicationPage extends GetView<ApplicationController> {
         ),
         context: context,
         builder: (BuildContext bc) {
-          return Container(
+          return SizedBox(
             height: 125,
             child: Padding(
-              padding: EdgeInsets.all(10.0),
+              padding: const EdgeInsets.all(10.0),
               child: Column(children: [
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -116,7 +115,9 @@ class ApplicationPage extends GetView<ApplicationController> {
                     Column(
                       children: [
                         IconButton(
-                            onPressed: () {},
+                            onPressed: () {
+                              controller.addFoodNavigation();
+                            },
                             iconSize: 48.0,
                             icon: ImageIcon(
                               AssetImage("assets/icons/add_food_function.png"),

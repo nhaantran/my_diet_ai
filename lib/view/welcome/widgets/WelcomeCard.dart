@@ -228,7 +228,7 @@ class VeryComplexButtonCard extends GetView<WelcomeController> {
   final String example;
   final Function onTap;
   final String duration;
-  final double difficulty;
+  final int difficulty;
   final double weightLoss;
   int percentage;
   final _color = Colors.white.obs;
@@ -387,7 +387,7 @@ class VeryComplexButtonCard extends GetView<WelcomeController> {
     );
   }
 
-  Widget _buildDotIndicator(double difficulty) {
+  Widget _buildDotIndicator(int difficulty) {
     return DotsIndicator(
       mainAxisSize: MainAxisSize.min,
       position: difficulty,

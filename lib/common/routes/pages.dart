@@ -5,6 +5,8 @@ import 'package:my_diet/view/welcome/welcomebinding.dart';
 import 'package:my_diet/view/welcome/welcomepage.dart';
 import '../../view/application/applicationbinding.dart';
 import '../../view/application/applicationpage.dart';
+import '../../view/food/foodbinding.dart';
+import '../../view/food/foodpage.dart';
 import '../../view/signin/signinbinding.dart';
 import '../../view/signin/signinpage.dart';
 import '../middlewares/router_auth.dart';
@@ -13,7 +15,7 @@ import 'routes.dart';
 
 class AppPages {
   static const INITIAL = AppRoutes.INITIAL;
-  static const APPlication = AppRoutes.Application;
+  static const Application = AppRoutes.Application;
   static final RouteObserver<Route> observer = RouteObservers();
   static List<String> history = [];
 
@@ -41,6 +43,11 @@ class AppPages {
       // middlewares: [
       //   RouteAuthMiddleware(priority: 1),
       // ],
+    ),
+    GetPage(
+      name: AppRoutes.Food,
+      page: () => FoodPage(),
+      binding: FoodBinding(), 
     ),
     // GetPage(
     //     name: AppRoutes.Contact,
