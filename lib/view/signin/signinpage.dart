@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get_state_manager/src/simple/get_view.dart';
 import 'package:my_diet/common/values/colors.dart';
+import 'package:my_diet/view/common_widgets/AppIntroduction.dart';
 import 'package:my_diet/view/signin/signincontroller.dart';
 
 // void main() {
@@ -12,157 +14,171 @@ class SignInPage extends GetView<SignInController> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        body: Center(
-            child: Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        ElevatedButton(
-            onPressed: () {
-              
-              controller.handleSignIn();
-            },
-            child: Text("Google sign-in"))
-      ],
-    )));
+      backgroundColor: AppColors.white,
+      body: Column(
+        children: [
+          AppIntroduction(),
+          signIn(),
+        ],
+      ),
+    );
   }
 }
 
-class SignIn extends GetView<SignInController> {
-  //const SignInPage({super.key});
+//     Scaffold(
+//         body: Center(
+//             child: Column(
+//       mainAxisAlignment: MainAxisAlignment.center,
+//       children: [
+//         ElevatedButton(
+//             onPressed: () {
 
-  final _formKey = GlobalKey<FormState>();
-  final _usernameController = TextEditingController();
-  final _passwordController = TextEditingController();
-  final _confirmPasswordController = TextEditingController();
+//               controller.handleSignIn();
+//             },
+//             child: Text("Google sign-in"))
+//       ],
+//     )));
+//   }
+// }
 
+class signIn extends GetView<SignInController> {
+  final signInKey = GlobalKey<FormState>();
   @override
   Widget build(BuildContext context) {
-    return Material(
+    return Form(
+      key: signInKey,
+      child: Padding(
+        padding: EdgeInsets.only(right: 10.0.w, left: 10.0.w),
         child: Column(
-      mainAxisAlignment: MainAxisAlignment.start,
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Container(
-          padding: const EdgeInsets.only(top: 70.0, left: 30.0),
-          child: Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
-                RichText(
-                    textAlign: TextAlign.left,
-                    text: const TextSpan(
-                        text: "Hello",
-                        style: TextStyle(
-                            fontSize: 26,
-                            color: AppColors.fontDark,
-                            fontWeight: FontWeight.w900))),
-                RichText(
-                    textAlign: TextAlign.left,
-                    text: const TextSpan(
-                        text: "Lorem asdl ooalls ",
-                        style: TextStyle(
-                            fontSize: 15,
-                            color: AppColors.fontDark,
-                            fontWeight: FontWeight.w400))),
-              ]),
-        ),
-        Padding(
-          padding: const EdgeInsets.all(30.0),
-          child: Form(
-            key: _formKey,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            TextFormField(
+              keyboardType: TextInputType.emailAddress,
+              decoration: InputDecoration(
+                labelText: "User Email",
+                border: const OutlineInputBorder(),
+                enabledBorder: OutlineInputBorder(
+                    borderSide:
+                        const BorderSide(width: 3, color: AppColors.brand05),
+                    borderRadius: BorderRadius.circular(20.0) //<-- SEE HERE
+                    ),
+              ),
+            ),
+            SizedBox(height: 20.0.h),
+            TextFormField(
+              obscureText: true,
+              enableSuggestions: false,
+              autocorrect: false,
+              decoration: InputDecoration(
+                suffixIcon: IconButton(
+                  icon: const Icon(
+                    Icons.visibility,
+                    color: AppColors.brand05,
+                  ),
+                  onPressed: () {},
+                ),
+                labelText: "Password",
+                border: const OutlineInputBorder(),
+                enabledBorder: OutlineInputBorder(
+                    borderSide:
+                        const BorderSide(width: 3, color: AppColors.brand05),
+                    borderRadius: BorderRadius.circular(20.0) //<-- SEE HERE
+                    ),
+              ),
+            ),
+            SizedBox(height: 10.0.h),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.end,
               children: [
-                TextFormField(
-                  controller: _usernameController,
-                  decoration: InputDecoration(
-                    labelText: 'Username',
-                  ),
-                  validator: (value) {
-                    if (value!.isEmpty) {
-                      return 'Please enter a username';
-                    }
-                    return null;
-                  },
-                ),
-                SizedBox(height: 16.0),
-                TextFormField(
-                  controller: _passwordController,
-                  decoration: InputDecoration(
-                    labelText: 'Password',
-                  ),
-                  obscureText: true,
-                  validator: (value) {
-                    if (value!.isEmpty) {
-                      return 'Please enter a password';
-                    }
-                    return null;
-                  },
-                ),
-                SizedBox(height: 16.0),
-                TextFormField(
-                  controller: _confirmPasswordController,
-                  decoration: InputDecoration(
-                    labelText: 'Confirm Password',
-                  ),
-                  obscureText: true,
-                  validator: (value) {
-                    if (value!.isEmpty) {
-                      return 'Please confirm your password';
-                    } else if (value != _passwordController.text) {
-                      return 'Passwords do not match';
-                    }
-                    return null;
-                  },
-                ),
-                SizedBox(height: 50.0),
-                ElevatedButton(
-                  onPressed: () {
-                    controller.handleSignIn();
-                    if (_formKey.currentState!.validate()) {
-                      // Perform sign-up logic here
-                      // You can access the entered values using:
-                      // _usernameController.text
-                      // _passwordController.text
-                      // _confirmPasswordController.text
-                    }
-                  },
-                  child: Text('Sign Up'),
-                  style: ButtonStyle(
-                      shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                          RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(18.0),
-                              side: BorderSide(color: AppColors.brand05)))),
-                ),
-                SizedBox(
-                  height: 10.0,
+                TextButton(
+                  onPressed: () {},
+                  child: const Text('Forgot Password?'),
                 ),
               ],
             ),
-          ),
-        ),
-        Center(
-          child: RichText(
-              textAlign: TextAlign.center,
-              text: TextSpan(
-                children: <TextSpan>[
-                  const TextSpan(
-                      text: "Already have an account? ",
+            SizedBox(height: 10.0.h),
+            SizedBox(
+              height: 40.h,
+              width: double.infinity,
+              child: ElevatedButton(
+                style: ButtonStyle(
+                    backgroundColor:
+                        MaterialStateProperty.all(AppColors.brand05),
+                    shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                        RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10.0),
+                            side: const BorderSide(color: AppColors.brand06)))),
+                onPressed: () {
+                  controller.handleSignIn();
+                },
+                child: const Text(
+                  'Sign In',
+                  style: TextStyle(fontSize: 16),
+                ),
+              ),
+            ),
+            SizedBox(height: 20.0.h),
+            const Text(
+              "Or",
+              style: TextStyle(
+                  fontSize: 14,
+                  fontFamily: "OpenSans",
+                  color: AppColors.fontMid),
+            ),
+            SizedBox(
+              height: 20.h,
+            ),
+            SizedBox(
+              height: 40.h,
+              width: double.infinity,
+              child: OutlinedButton.icon(
+                  onPressed: () {},
+                  icon: Image.asset("assets/icons/google.png"),
+                  label: const Text(
+                    'Sign In with Google',
+                    style: TextStyle(
+                        color: AppColors.brand05, fontFamily: "OpenSans"),
+                  ),
+                  style: ButtonStyle(
+                      shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                          RoundedRectangleBorder(
+                    side: const BorderSide(color: AppColors.purple),
+                    borderRadius: BorderRadius.circular(10.0),
+                  )))),
+            ),
+            SizedBox(
+              height: 10.h,
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                const Text("Don't have an account? ",
+                    style: TextStyle(
+                      fontFamily: "OpenSans",
+                      color: AppColors.fontDark,
+                      fontSize: 16,
+                      fontWeight: FontWeight.w400,
+                    )),
+                TextButton(
+                    onPressed: () {
+                      controller.moveToSignUp();
+                    },
+                    child: const Text(
+                      "Sign up",
                       style: TextStyle(
-                          fontSize: 15,
-                          color: AppColors.fontDark,
-                          fontWeight: FontWeight.w400)),
-                  TextSpan(
-                      text: "Sign in ",
-                      onEnter: (event) {},
-                      style: const TextStyle(
-                          fontSize: 15,
-                          color: AppColors.brand05,
-                          fontWeight: FontWeight.w400))
-                ],
-              )),
+                        fontFamily: "OpenSans",
+                        decoration: TextDecoration.underline,
+                        color: AppColors.brand05,
+                        fontSize: 16,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ))
+              ],
+            ),
+          ],
         ),
-      ],
-    ));
+      ),
+    );
   }
 }

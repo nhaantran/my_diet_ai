@@ -20,6 +20,10 @@ class ApplicationController extends GetxController {
     pageController.jumpToPage(index);
   }
 
+  void addExerciseNavigation() {
+    Get.toNamed(AppRoutes.Exercise);
+  }
+
   void addFoodNavigation() {
     Get.toNamed(AppRoutes.Food);
     //var data = await Get.toNamed(AppRoutes.Food);
@@ -54,17 +58,6 @@ class ApplicationController extends GetxController {
           )),
       const BottomNavigationBarItem(
           icon: ImageIcon(
-            AssetImage("assets/icons/plus.png"),
-            size: 36.0,
-            color: AppColors.brand05,
-          ),
-          label: "",
-          activeIcon: ImageIcon(
-            AssetImage("assets/icons/plus.png"),
-            color: AppColors.brand05,
-          )),
-      const BottomNavigationBarItem(
-          icon: ImageIcon(
             AssetImage("assets/icons/message.png"),
             color: AppColors.thirdElementText,
           ),
@@ -74,13 +67,13 @@ class ApplicationController extends GetxController {
             color: AppColors.brand05,
           )),
       const BottomNavigationBarItem(
-          icon: ImageIcon(
-            AssetImage("assets/icons/setting.png"),
+          icon: Icon(
+            Icons.person_outline_outlined,
             color: AppColors.thirdElementText,
           ),
           label: "Setting",
-          activeIcon: ImageIcon(
-            AssetImage("assets/icons/setting.png"),
+          activeIcon: Icon(
+            Icons.person_outline_outlined,
             color: AppColors.brand05,
           )),
     ];

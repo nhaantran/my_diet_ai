@@ -1,17 +1,57 @@
+// ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+
 import 'package:my_diet/view/food/foodcontroller.dart';
 
+import '../../common/routes/names.dart';
 import '../../common/values/colors.dart';
 
 class FoodPage extends GetView<FoodController> {
-  const FoodPage({super.key});
+  FoodPage(
+    this.mealTime,
+  );
 
+  String mealTime;
   @override
   Widget build(BuildContext context) {
+    if (mealTime != null) {
+      controller.selectedMealTime.value = mealTime as String;
+    }
     return Scaffold(
-        appBar: AppBar(),
+        appBar: AppBar(
+          elevation: 0.0,
+          leading: IconButton(
+            icon: Icon(Icons.arrow_back_ios),
+            color: AppColors.brand05,
+            onPressed: () {
+              Get.back();
+            },
+          ),
+          centerTitle: true,
+          title: Obx(
+            () => DropdownButton(
+              elevation: 0,
+              iconEnabledColor: AppColors.brand05,
+              value: controller.selectedMealTime.isEmpty
+                  ? "Breakfast"
+                  : controller.selectedMealTime.value,
+              items: controller.mealTime
+                  .map<DropdownMenuItem<String>>((String value) {
+                return DropdownMenuItem<String>(
+                  value: value,
+                  child: Text(value),
+                );
+              }).toList(),
+              onChanged: (value) {
+                controller.onMealTimeChanged(value as String);
+              },
+              style: const TextStyle(color: AppColors.brand05, fontSize: 16),
+            ),
+          ),
+          backgroundColor: AppColors.monochromatic09,
+        ),
         body: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             mainAxisAlignment: MainAxisAlignment.start,
@@ -133,6 +173,7 @@ class FoodPage extends GetView<FoodController> {
   }
 
   createMealFunction() {
+    Get.toNamed(AppRoutes.AddMeal);
     print("Create meal");
   }
 

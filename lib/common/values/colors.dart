@@ -64,4 +64,6 @@ class AppColors {
   static const Color fontLight = Color(0xffcccccc);
   static const Color white = Color(0xffffffff);
   static const Color monochromatic09 = Color(0xfffcfcfc);
+  static const Color green = Color(0xff31d895);
+  static const Color purple = Color(0xff313cd8);
 }

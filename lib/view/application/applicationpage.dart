@@ -5,6 +5,7 @@ import 'package:flutter/src/widgets/placeholder.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:my_diet/view/home/homepage.dart';
+import 'package:my_diet/view/profile/profilepage.dart';
 
 import '../../common/values/colors.dart';
 import '../daily/dailypage.dart';
@@ -29,10 +30,8 @@ class ApplicationPage extends GetView<ApplicationController> {
         // Center(
         //   child: Text("4"),
         // ),
-        FoodPage(),
-        Center(
-          child: Text("5"),
-        ),
+
+        ProfilePage(),
       ],
     );
   }
@@ -43,15 +42,7 @@ class ApplicationPage extends GetView<ApplicationController> {
           iconSize: 36.0,
           currentIndex: controller.page.value,
           type: BottomNavigationBarType.fixed,
-          onTap: (value) => {
-            if (value == 2)
-              {
-                _mainFunctionModalBottomSheet(context),
-                print("Hello"),
-              }
-            else
-              {controller.handleNavBarTap(value)},
-          },
+          onTap: (value) => {controller.handleNavBarTap(value)},
           showSelectedLabels: false,
           showUnselectedLabels: false,
           unselectedItemColor: AppColors.tabBarElement,
@@ -74,26 +65,26 @@ class ApplicationPage extends GetView<ApplicationController> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Column(
-                      children: [
-                        IconButton(
-                            onPressed: () {
-                              print("ccjz");
-                            },
-                            iconSize: 48.0,
-                            icon: ImageIcon(
-                              AssetImage(
-                                  "assets/icons/suggested_food_function.png"),
-                              color: AppColors.warning,
-                              size: 48.0,
-                            )),
-                        Text(
-                          "Suggest Food",
-                          style: TextStyle(
-                              fontSize: 10, fontWeight: FontWeight.w500),
-                        )
-                      ],
-                    ),
+                    // Column(
+                    //   children: [
+                    //     IconButton(
+                    //         onPressed: () {
+                    //           print("ccjz");
+                    //         },
+                    //         iconSize: 48.0,
+                    //         icon: ImageIcon(
+                    //           AssetImage(
+                    //               "assets/icons/suggested_food_function.png"),
+                    //           color: AppColors.warning,
+                    //           size: 48.0,
+                    //         )),
+                    //     Text(
+                    //       "Suggest Food",
+                    //       style: TextStyle(
+                    //           fontSize: 10, fontWeight: FontWeight.w500),
+                    //     )
+                    //   ],
+                    // ),
                     Column(
                       children: [
                         IconButton(
@@ -151,7 +142,9 @@ class ApplicationPage extends GetView<ApplicationController> {
                     Column(
                       children: [
                         IconButton(
-                            onPressed: () {},
+                            onPressed: () {
+                              controller.addExerciseNavigation();
+                            },
                             iconSize: 48.0,
                             icon: ImageIcon(
                               AssetImage(
@@ -179,6 +172,21 @@ class ApplicationPage extends GetView<ApplicationController> {
     return Scaffold(
       body: _buildPageView(),
       bottomNavigationBar: _buildBottomNavigation(context),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          _mainFunctionModalBottomSheet(context);
+        },
+        shape: RoundedRectangleBorder(
+            side: BorderSide(width: 2, color: AppColors.brand06),
+            borderRadius: BorderRadius.circular(100)),
+        backgroundColor: AppColors.white,
+        child: Icon(
+          Icons.add,
+          size: 36.0,
+        ),
+        foregroundColor: AppColors.brand06,
+      ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
     );
   }
 }

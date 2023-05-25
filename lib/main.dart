@@ -9,7 +9,7 @@ import 'common/services/storage.dart';
 import 'common/store/config.dart';
 import 'common/store/user.dart';
 import 'firebase_options.dart';
-
+import 'package:openfoodfacts/openfoodfacts.dart';
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Get.putAsync<StorageService>(() => StorageService().init());
@@ -19,6 +19,14 @@ Future<void> main() async {
     //name: 'login demo project',
     options: DefaultFirebaseOptions.currentPlatform,
   );
+  OpenFoodAPIConfiguration.globalUser = const User(
+    userId: 'myUsername',
+    password: 'myPassword',
+  );
+  OpenFoodAPIConfiguration.globalLanguages = <OpenFoodFactsLanguage>[
+    OpenFoodFactsLanguage.ENGLISH,
+  ];
+  OpenFoodAPIConfiguration.globalCountry = OpenFoodFactsCountry.FRANCE;
 
   runApp(const MyApp());
 }

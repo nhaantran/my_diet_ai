@@ -1,28 +1,35 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
+import '../../common/entities/userhealt.dart';
 import '../../common/routes/names.dart';
 import '../../common/store/config.dart';
+import '../../services/remote_service.dart';
 
 class WelcomeController extends GetxController {
+  var name = "nhaantran".obs;
+  var age = 21.obs;
   var index = 0.obs;
+  var gender = "Male".obs;
+  var goal = "maintenance".obs;
+  var exercise = "moderate".obs;
+  var progressValue = 0.0.obs;
+  var height = 170.obs;
+  var goalWeight = 80.obs;
+  var weight = 75.obs;
 
-  var beginHeight = 100.obs;
-  var height = 150.obs;
-  var endHeight = 200.obs;
-  var weight = 800.obs;
+  static CustomerData? user;
   changePage(int index) async {
     this.index.value = index;
+    progressValue.value = index / 10;
   }
 
   changeWeight(int index) async {
     weight.value = index;
   }
 
-  changeHeight(int begin, int value, int end) async {
-    beginHeight.value = begin;
+  changeHeight(int value) async {
     height.value = value;
-    endHeight.value = end;
   }
 
   movingNextPage(PageController pageController, int currentPageIndex) {
@@ -37,7 +44,20 @@ class WelcomeController extends GetxController {
 
   handleSignIn() async {
     //ConfigStore.to.saveAlreadyOpen();
-
+    getData();
+    RemoteService().foodTest();
     Get.offAndToNamed(AppRoutes.SIGN_IN);
+  }
+
+  getData() async {
+    //List<String>? list = await RemoteService().getFoods();
+    user = await RemoteService().postHealthInformation(
+        height.value,
+        weight.value,
+        goalWeight.value,
+        age.value,
+        gender.value,
+        goal.value,
+        exercise.value);
   }
 }

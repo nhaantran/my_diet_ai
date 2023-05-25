@@ -17,7 +17,7 @@ class ContentRow extends StatelessWidget {
   final String? image;
   final String header;
   final String description;
-  final AssetImage icon;
+  final Icon icon;
   final Function onTap;
 
   @override
@@ -34,7 +34,7 @@ class ContentRow extends StatelessWidget {
           child: Container(
             padding: EdgeInsets.only(left: 10.w, right: 10.w),
             height: 90.0.h,
-            width: 300.0.w,
+            width: 320.0.w,
             decoration: BoxDecoration(
               color: AppColors.monochromatic09,
               borderRadius: BorderRadius.circular(20.0),
@@ -94,16 +94,16 @@ class ContentRow extends StatelessWidget {
                   ),
                 ),
                 Container(
-                  padding: const EdgeInsets.only(right: 10.0),
+                  margin: EdgeInsets.only(right: 20.0),
                   height: 16.0.w,
                   width: 16.0.w,
-                  decoration: BoxDecoration(
-                      image: DecorationImage(image: icon, fit: BoxFit.fill)),
-                  child: SizedBox(
-                    width: 16.w,
-                    height: 16.w,
+                  child: IconButton(
+                    icon: icon,
+                    onPressed: () {
+                      onTap();
+                    },
                   ),
-                )
+                ),
               ],
             ),
           ),

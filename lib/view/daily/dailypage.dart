@@ -4,8 +4,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:get/get_state_manager/src/simple/get_view.dart';
+import 'package:my_diet/common/routes/names.dart';
 import 'package:my_diet/view/daily/dailycontroller.dart';
+import 'package:my_diet/view/food/foodbinding.dart';
+import 'package:my_diet/view/food/foodpage.dart';
 import 'package:my_diet/view/home/homecontroller.dart';
+import 'package:my_diet/view/welcome/welcomecontroller.dart';
 
 import '../../common/values/colors.dart';
 import '../common_widgets/ContentRow.dart';
@@ -20,6 +24,7 @@ class DailyPage extends GetView<DailyController> {
       // color: AppColors.monochromatic09,
       // alignment: Alignment.topCenter,
       appBar: AppBar(
+        elevation: 0.0,
         backgroundColor: AppColors.monochromatic09,
         title: const Text(
           "Add Dialy Screen",
@@ -33,46 +38,130 @@ class DailyPage extends GetView<DailyController> {
       ),
       body: SingleChildScrollView(
         child: Column(mainAxisAlignment: MainAxisAlignment.start, children: [
-          const SizedBox(height: 40.0),
+          const SizedBox(height: 20.0),
           Center(
             child: _datePicker(),
           ),
-          const SizedBox(height: 40.0),
+          const SizedBox(height: 10.0),
           _caloriesRemaining(),
           const SizedBox(height: 20.0),
-          ContentRow(
-            description: 'this is a test',
-            header: 'Breakfast',
-            icon: AssetImage("assets/icons/active.png"),
-            onTap: () {},
-          ),
-          const SizedBox(
-            height: 5.0,
-          ),
-          ContentRow(
-            description: '',
-            header: 'Lunch',
-            icon: AssetImage("assets/icons/arrow-right.png"),
-            onTap: () {},
-          ),
-          const SizedBox(
-            height: 5.0,
-          ),
-          ContentRow(
-            description: '',
-            header: 'Dinner',
-            icon: AssetImage("assets/icons/arrow-right.png"),
-            onTap: () {},
-          ),
-          const SizedBox(
-            height: 5.0,
-          ),
-          ContentRow(
-            description: '',
-            header: 'Snack',
-            icon: AssetImage("assets/icons/arrow-right.png"),
-            onTap: () {},
-          ),
+          Padding(
+            padding: EdgeInsets.only(right: 15.0, left: 15.0),
+            child: Column(children: [
+              Container(
+                margin: EdgeInsets.only(bottom: 10.0),
+                decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(20.0),
+                    color: AppColors.brand06),
+                child: ListTile(
+                  title: const Text("Breakfast",
+                      style: TextStyle(
+                          fontFamily: "Gothic", fontWeight: FontWeight.bold)),
+                  textColor: AppColors.white,
+                  subtitle: Text("Engery for the day!"),
+                  trailing: IconButton(
+                    icon: Icon(Icons.add_circle_outline, size: 36.0),
+                    onPressed: () {
+                      Get.to(FoodPage("Breakfast"), binding: FoodBinding());
+                    },
+                  ),
+                  tileColor: AppColors.brand05,
+                  iconColor: AppColors.white,
+                  leading: ClipRRect(
+                    borderRadius: BorderRadius.circular(20.0),
+                    child: Image.asset("assets/icons/breakfast.png",
+                        fit: BoxFit.fill),
+                  ),
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(20.0)),
+                ),
+              ),
+              Container(
+                margin: EdgeInsets.only(bottom: 10.0),
+                decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(20.0),
+                    color: AppColors.brand06),
+                child: ListTile(
+                  title: const Text("Lunch",
+                      style: TextStyle(
+                          fontFamily: "Gothic", fontWeight: FontWeight.bold)),
+                  textColor: AppColors.white,
+                  subtitle: Text("Fuel for the rest!"),
+                  trailing: IconButton(
+                    icon: Icon(Icons.add_circle_outline, size: 36.0),
+                    onPressed: () {
+                      Get.to(FoodPage("Lunch"), binding: FoodBinding());
+                    },
+                  ),
+                  tileColor: AppColors.brand05,
+                  iconColor: AppColors.white,
+                  leading: ClipRRect(
+                    borderRadius: BorderRadius.circular(20.0),
+                    child:
+                        Image.asset("assets/icons/lunch.png", fit: BoxFit.fill),
+                  ),
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(20.0)),
+                ),
+              ),
+              Container(
+                margin: EdgeInsets.only(bottom: 10.0),
+                decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(20.0),
+                    color: AppColors.brand06),
+                child: ListTile(
+                  title: const Text("Dinner",
+                      style: TextStyle(
+                          fontFamily: "Gothic", fontWeight: FontWeight.bold)),
+                  textColor: AppColors.white,
+                  subtitle: Text("Reward in the end of day!"),
+                  trailing: IconButton(
+                    icon: Icon(Icons.add_circle_outline, size: 36.0),
+                    onPressed: () {
+                      Get.to(FoodPage("Dinner"), binding: FoodBinding());
+                    },
+                  ),
+                  tileColor: AppColors.brand05,
+                  iconColor: AppColors.white,
+                  leading: ClipRRect(
+                    borderRadius: BorderRadius.circular(20.0),
+                    child: Image.asset("assets/icons/dinner.png",
+                        fit: BoxFit.fill),
+                  ),
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(20.0)),
+                ),
+              ),
+              Container(
+                margin: EdgeInsets.only(bottom: 5.0),
+                decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(20.0),
+                    color: AppColors.brand06),
+                child: ListTile(
+                  title: const Text("Snack",
+                      style: TextStyle(
+                          fontFamily: "Gothic", fontWeight: FontWeight.bold)),
+                  textColor: AppColors.white,
+                  subtitle: Text("Little bit free time?"),
+                  trailing: IconButton(
+                    icon: Icon(Icons.add_circle_outline, size: 36.0),
+                    onPressed: () {
+                      Get.to(FoodPage("Snack"), binding: FoodBinding());
+                    },
+                  ),
+                  tileColor: AppColors.brand05,
+                  iconColor: AppColors.white,
+                  leading: ClipRRect(
+                    borderRadius: BorderRadius.circular(20.0),
+                    child:
+                        Image.asset("assets/icons/snack.png", fit: BoxFit.fill),
+                  ),
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(20.0)),
+                ),
+              ),
+            ]),
+          )
         ]),
       ),
     );
@@ -95,14 +184,21 @@ class DailyPage extends GetView<DailyController> {
                 height: 10.0,
               ),
               Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-                _caloriesColumn(homeController.baseGoal.toString(), "Goal"),
-                _caloriesColumn("-", ""),
-                _caloriesColumn(homeController.caloriesFood.toString(), "Food"),
+                _caloriesColumn(
+                    WelcomeController.user!.basalMetabolicRate.hb.calories.value
+                        .toString(),
+                    "Goal"),
                 _caloriesColumn("-", ""),
                 _caloriesColumn(
-                    homeController.caloriesExercise.toString(), "Exercise"),
+                    homeController.caloriesFood.value.toString(), "Food"),
+                _caloriesColumn("-", ""),
+                _caloriesColumn(
+                    homeController.caloriesExercise.value.toString(),
+                    "Exercise"),
                 _caloriesColumn("=", ""),
-                _caloriesColumn("Not yet", "Remaining"),
+                _caloriesColumn(
+                    "${WelcomeController.user!.basalMetabolicRate.hb.calories.value - homeController.caloriesFood.value}",
+                    "Remaining"),
               ]),
             ],
           ),
@@ -121,7 +217,7 @@ class DailyPage extends GetView<DailyController> {
               return ContentRow(
                 description: 'this is a test',
                 header: 'TEST',
-                icon: AssetImage("assets/icons/active.png"),
+                icon: Icon(Icons.arrow_forward_ios),
                 onTap: () {},
               );
             },
@@ -175,7 +271,7 @@ class DailyPage extends GetView<DailyController> {
       height: 80.h,
       daysCount: 7,
       initialSelectedDate: DateTime.now(),
-      selectionColor: AppColors.success,
+      selectionColor: AppColors.neutral,
       //selectedTextColor: AppColors.fontDark,
       locale: "vi_VN",
       dayTextStyle: TextStyle(fontFamily: "Gothic", fontSize: 14),

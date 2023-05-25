@@ -11,9 +11,11 @@ class SignInController extends GetxController {
     this.index.value = index;
   }
 
-  handleSignIn() async {
-    //ConfigStore.to.saveAlreadyOpen();
+  moveToSignUp() async {
+    Get.offAndToNamed(AppRoutes.SIGN_UP);
+  }
 
+  handleSignIn() async {
     Get.offAndToNamed(AppRoutes.Application);
   }
 }
