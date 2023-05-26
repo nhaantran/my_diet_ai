@@ -10,6 +10,7 @@ import 'common/store/config.dart';
 import 'common/store/user.dart';
 import 'firebase_options.dart';
 import 'package:openfoodfacts/openfoodfacts.dart';
+
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Get.putAsync<StorageService>(() => StorageService().init());
@@ -26,7 +27,7 @@ Future<void> main() async {
   OpenFoodAPIConfiguration.globalLanguages = <OpenFoodFactsLanguage>[
     OpenFoodFactsLanguage.ENGLISH,
   ];
-  OpenFoodAPIConfiguration.globalCountry = OpenFoodFactsCountry.FRANCE;
+  OpenFoodAPIConfiguration.globalCountry = OpenFoodFactsCountry.USA;
 
   runApp(const MyApp());
 }

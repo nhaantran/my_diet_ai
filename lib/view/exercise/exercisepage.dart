@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:get/get.dart';
 import 'package:my_diet/common/routes/names.dart';
+import 'package:my_diet/view/exercise/widget/ExerciseTile.dart';
 
 import '../../common/values/colors.dart';
 import 'exercisecontroller.dart';
@@ -39,6 +41,11 @@ class ExercisePage extends GetView<ExerciseController> {
             height: 60.h,
             padding: const EdgeInsets.all(10.0),
             child: TextField(
+              onEditingComplete: () {
+                controller.loadData();
+                //print(controller.exerciseSearchController.text);
+              },
+              controller: controller.exerciseSearchController,
               decoration: InputDecoration(
                 prefixIcon: const Icon(Icons.search),
                 suffixIcon: IconButton(
@@ -56,10 +63,19 @@ class ExercisePage extends GetView<ExerciseController> {
               ),
             ),
           ),
-          Container(
+          Expanded(
+              child: Container(
             color: AppColors.brand10,
-            child: SingleChildScrollView(),
-          )
+            child: Obx(() => AlignedGridView.count(
+                  itemCount: controller.exerciseList.length,
+                  crossAxisCount: 4,
+                  mainAxisSpacing: 4,
+                  crossAxisSpacing: 16,
+                  itemBuilder: (context, index) {
+                    return ExerciseTile(controller.exerciseList[index]);
+                  },
+                )),
+          )),
         ],
       ),
     );

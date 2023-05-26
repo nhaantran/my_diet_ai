@@ -1,15 +1,12 @@
-import 'package:dots_indicator/dots_indicator.dart';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
-import 'package:flutter/src/widgets/placeholder.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:my_diet/view/home/homepage.dart';
 import 'package:my_diet/view/profile/profilepage.dart';
 
 import '../../common/values/colors.dart';
 import '../daily/dailypage.dart';
-import '../food/foodpage.dart';
 import 'applicationcontroller.dart';
 
 class ApplicationPage extends GetView<ApplicationController> {

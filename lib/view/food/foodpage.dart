@@ -1,12 +1,15 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:get/get.dart';
 
 import 'package:my_diet/view/food/foodcontroller.dart';
 
 import '../../common/routes/names.dart';
 import '../../common/values/colors.dart';
+import '../exercise/widget/ExerciseTile.dart';
+import 'FoodTile.dart';
 
 class FoodPage extends GetView<FoodController> {
   FoodPage(
@@ -57,7 +60,51 @@ class FoodPage extends GetView<FoodController> {
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
               _tabBar(),
+              Container(
+                height: 60.h,
+                padding: const EdgeInsets.all(10.0),
+                child: TextField(
+                  onEditingComplete: () {
+                    controller.getData();
+                    print(controller.foodSearchController.text);
+                  },
+                  controller: controller.foodSearchController,
+                  decoration: InputDecoration(
+                    prefixIcon: const Icon(Icons.search),
+                    suffixIcon: IconButton(
+                      icon: const Icon(Icons.clear),
+                      onPressed: () {},
+                    ),
+                    hintText: "Search food...",
+                    alignLabelWithHint: true,
+                    border: const OutlineInputBorder(),
+                    enabledBorder: OutlineInputBorder(
+                        borderSide: const BorderSide(
+                            width: 1, color: AppColors.brand05),
+                        borderRadius: BorderRadius.circular(20.0) //<-- SEE HERE
+                        ),
+                  ),
+                ),
+              ),
               _tabBarView(),
+              Expanded(
+                  child: Container(
+                color: AppColors.brand05,
+                child: Obx(() {
+                  if (controller.isLoading.value && controller.startLoading.value) {
+                    return const Center(child: CircularProgressIndicator());
+                  }
+                  return AlignedGridView.count(
+                    itemCount: controller.foodList.length,
+                    crossAxisCount: 4,
+                    mainAxisSpacing: 4,
+                    crossAxisSpacing: 16,
+                    itemBuilder: (context, index) {
+                      return FoodTile(controller.foodList[index]);
+                    },
+                  );
+                }),
+              )),
             ]));
   }
 
@@ -191,7 +238,7 @@ class FoodPage extends GetView<FoodController> {
       height: 145.h,
       child: TabBarView(controller: controller.tabController, children: [
         _functionAddFood(
-            "Scan food",
+            "Add food",
             const AssetImage("assets/icons/scan_food.png"),
             scanMealFunction,
             "Scan barcode",

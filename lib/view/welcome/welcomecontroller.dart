@@ -3,7 +3,6 @@ import 'package:get/get.dart';
 
 import '../../common/entities/userhealt.dart';
 import '../../common/routes/names.dart';
-import '../../common/store/config.dart';
 import '../../services/remote_service.dart';
 
 class WelcomeController extends GetxController {
@@ -19,6 +18,7 @@ class WelcomeController extends GetxController {
   var weight = 75.obs;
 
   static CustomerData? user;
+
   changePage(int index) async {
     this.index.value = index;
     progressValue.value = index / 10;
@@ -45,7 +45,7 @@ class WelcomeController extends GetxController {
   handleSignIn() async {
     //ConfigStore.to.saveAlreadyOpen();
     getData();
-    RemoteService().foodTest();
+    //RemoteService().foodTest();
     Get.offAndToNamed(AppRoutes.SIGN_IN);
   }
 

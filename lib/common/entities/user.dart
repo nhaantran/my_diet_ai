@@ -5,9 +5,6 @@ class UserData {
   final String? name;
   final String? email;
 
-  final String? gender;
-  final double? weight;
-  final double? height;
   
   final String? photourl;
   final String? location;
@@ -15,9 +12,6 @@ class UserData {
   final Timestamp? addtime;
 
   UserData( {
-    this.gender, 
-    this.weight, 
-    this.height,
     this.id,
     this.name,
     this.email,
@@ -56,7 +50,7 @@ class UserData {
   }
 }
 
-// 登录返回
+
 class UserLoginResponseEntity {
   String? accessToken;
   String? displayName;

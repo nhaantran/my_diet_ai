@@ -347,12 +347,12 @@ class HomePage extends GetView<HomeController> {
                         Row(
                           children: [
                             Text(
-                              "${controller.caloriesFood}",
+                              "${controller.caloriesFood.value}",
                               style: const TextStyle(
                                 color: AppColors.white,
                                 fontFamily: "Gothic",
                                 fontWeight: FontWeight.w900,
-                                fontSize: 50,
+                                fontSize: 48,
                               ),
                             ),
                             const Padding(
@@ -388,12 +388,12 @@ class HomePage extends GetView<HomeController> {
                           children: [
                             Text(
                               //"${controller.baseGoal.value - controller.caloriesFood.value}",
-                              "${WelcomeController.user!.basalMetabolicRate.hb.calories.value - controller.caloriesFood.value}",
+                              "${WelcomeController.user!.basalMetabolicRate.hb.calories.value.toInt() - controller.caloriesFood.value}",
                               style: const TextStyle(
                                 color: AppColors.brand05,
                                 fontFamily: "Gothic",
                                 fontWeight: FontWeight.w900,
-                                fontSize: 50,
+                                fontSize: 48,
                               ),
                             ),
                           ],

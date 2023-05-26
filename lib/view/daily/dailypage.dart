@@ -185,7 +185,7 @@ class DailyPage extends GetView<DailyController> {
               ),
               Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
                 _caloriesColumn(
-                    WelcomeController.user!.basalMetabolicRate.hb.calories.value
+                    WelcomeController.user!.basalMetabolicRate.hb.calories.value.toInt()
                         .toString(),
                     "Goal"),
                 _caloriesColumn("-", ""),
@@ -197,7 +197,7 @@ class DailyPage extends GetView<DailyController> {
                     "Exercise"),
                 _caloriesColumn("=", ""),
                 _caloriesColumn(
-                    "${WelcomeController.user!.basalMetabolicRate.hb.calories.value - homeController.caloriesFood.value}",
+                    "${WelcomeController.user!.basalMetabolicRate.hb.calories.value.toInt() - homeController.caloriesFood.value}",
                     "Remaining"),
               ]),
             ],

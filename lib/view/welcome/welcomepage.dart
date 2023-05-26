@@ -13,7 +13,6 @@ import 'package:percent_indicator/linear_percent_indicator.dart';
 import '../../common/values/colors.dart';
 import '../common_widgets/KeepAlivePage.dart';
 import 'pages/TargetWeightWelcomePage.dart';
-import 'widgets/WelcomeCard.dart';
 
 class WelcomePage extends StatefulWidget {
   const WelcomePage({super.key});

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:my_diet/services/remote_service.dart';
 
 import '../../common/routes/names.dart';
 import '../../common/values/colors.dart';
@@ -22,6 +23,7 @@ class ApplicationController extends GetxController {
 
   void addExerciseNavigation() {
     Get.toNamed(AppRoutes.Exercise);
+    
   }
 
   void addFoodNavigation() {
