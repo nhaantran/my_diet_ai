@@ -387,8 +387,9 @@ class HomePage extends GetView<HomeController> {
                         Row(
                           children: [
                             Text(
+                              "${controller.baseGoal}",
                               //"${controller.baseGoal.value - controller.caloriesFood.value}",
-                              "${WelcomeController.user!.basalMetabolicRate.hb.calories.value.toInt() - controller.caloriesFood.value}",
+                              //"${WelcomeController.user!.basalMetabolicRate.hb.calories.value.toInt() - controller.caloriesFood.value}",
                               style: const TextStyle(
                                 color: AppColors.brand05,
                                 fontFamily: "Gothic",
@@ -408,9 +409,10 @@ class HomePage extends GetView<HomeController> {
                     lineHeight: 10.h,
                     backgroundColor: AppColors.brand05,
                     progressColor: AppColors.white,
-                    percent: controller.caloriesFood.value /
-                        WelcomeController
-                            .user!.basalMetabolicRate.hb.calories.value,
+                    percent: 0.5,
+                    //controller.caloriesFood.value / 100,
+                        // WelcomeController
+                        //     .user!.basalMetabolicRate.hb.calories.value,
                     animateFromLastPercent: true,
                     barRadius: Radius.circular(10),
                     animation: true,

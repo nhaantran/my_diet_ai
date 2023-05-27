@@ -10,6 +10,7 @@ CustomerData customerDataFromJson(String str) =>
 String customerDataToJson(CustomerData data) => json.encode(data.toJson());
 
 class CustomerData {
+  String id;
   String height;
   String weight;
   String age;
@@ -25,6 +26,7 @@ class CustomerData {
   IdealBodyWeight idealBodyWeight;
 
   CustomerData({
+    required this.id,
     required this.height,
     required this.weight,
     required this.age,
@@ -41,6 +43,7 @@ class CustomerData {
   });
 
   factory CustomerData.fromJson(Map<String, dynamic> json) => CustomerData(
+    id: json["id"],
         height: json["height"],
         weight: json["weight"],
         age: json["age"],
@@ -61,6 +64,7 @@ class CustomerData {
       );
 
   Map<String, dynamic> toJson() => {
+    "id":id,
         "height": height,
         "weight": weight,
         "age": age,

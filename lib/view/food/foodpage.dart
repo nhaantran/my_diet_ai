@@ -66,7 +66,7 @@ class FoodPage extends GetView<FoodController> {
                 child: TextField(
                   onEditingComplete: () {
                     controller.getData();
-                    print(controller.foodSearchController.text);
+                    // print(controller.foodSearchController.text);
                   },
                   controller: controller.foodSearchController,
                   decoration: InputDecoration(
@@ -91,12 +91,13 @@ class FoodPage extends GetView<FoodController> {
                   child: Container(
                 color: AppColors.brand05,
                 child: Obx(() {
-                  if (controller.isLoading.value && controller.startLoading.value) {
+                  if (controller.isLoading.value &&
+                      controller.startLoading.value) {
                     return const Center(child: CircularProgressIndicator());
                   }
                   return AlignedGridView.count(
                     itemCount: controller.foodList.length,
-                    crossAxisCount: 4,
+                    crossAxisCount: 2,
                     mainAxisSpacing: 4,
                     crossAxisSpacing: 16,
                     itemBuilder: (context, index) {

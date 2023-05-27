@@ -56,6 +56,7 @@ class RemoteService {
         "height=190&weight=80&age=30&gender=male&exercise=little&goal=maintenance&deficit=500&goalWeight=85";
 
     var information = {
+      'id': "null",
       'height': height.toString(),
       'weight': weight.toString(),
       'goalWeight': goalWeight.toString(),
@@ -111,7 +112,6 @@ class RemoteService {
       User(userId: '', password: ''),
       configuration,
     );
-    print(result.products?[0].productName);
     return result.products;
     
   }

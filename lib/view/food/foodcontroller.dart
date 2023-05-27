@@ -40,6 +40,9 @@ class FoodController extends GetxController with SingleGetTickerProviderMixin {
         foodList.value = foods;
       }
     } finally {
+      // for (int i = 0; i < foodList.length; i++) {
+      //   print("Name: +${foodList.value[i].productName}");
+      // }
       isLoading(false);
       startLoading(false);
     }
