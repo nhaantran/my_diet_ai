@@ -110,7 +110,7 @@ class signIn extends GetView<SignInController> {
                             borderRadius: BorderRadius.circular(10.0),
                             side: const BorderSide(color: AppColors.brand06)))),
                 onPressed: () {
-                  controller.handleSignIn();
+                  //controller.handleSignIn();
                 },
                 child: const Text(
                   'Sign In',

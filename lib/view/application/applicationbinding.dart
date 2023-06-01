@@ -5,6 +5,7 @@ import 'package:my_diet/view/food/addmeal/addmealcontroller.dart';
 import 'package:my_diet/view/food/foodcontroller.dart';
 import 'package:my_diet/view/home/homecontroller.dart';
 
+import '../profile/profilecontroller.dart';
 import 'applicationcontroller.dart';
 
 class ApplicationBinding implements Bindings {
@@ -17,6 +18,8 @@ class ApplicationBinding implements Bindings {
     Get.lazyPut<FoodController>(() => FoodController());
     Get.lazyPut<AddMealController>(() => AddMealController());
     Get.lazyPut<ExerciseController>(() => ExerciseController());
+    Get.lazyPut<ProfileController>(() => ProfileController());
+
 
   }
 }
