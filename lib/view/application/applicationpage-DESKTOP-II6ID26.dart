@@ -27,7 +27,7 @@ class ApplicationPage extends GetView<ApplicationController> {
         //   child: Text("4"),
         // ),
 
-        ProfilePage(),
+        const ProfilePage(),
       ],
     );
   }

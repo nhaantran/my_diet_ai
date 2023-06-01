@@ -133,7 +133,7 @@ class signIn extends GetView<SignInController> {
               height: 40.h,
               width: double.infinity,
               child: OutlinedButton.icon(
-                  onPressed: () {},
+                  onPressed: () => controller.handleSignIn(),
                   icon: Image.asset("assets/icons/google.png"),
                   label: const Text(
                     'Sign In with Google',

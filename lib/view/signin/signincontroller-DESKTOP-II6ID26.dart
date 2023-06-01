@@ -69,7 +69,7 @@ class SignInController extends GetxController {
         Get.offAndToNamed(AppRoutes.Application);
       }
     } catch (e) {
-      toastInfo(msg: "Login Failed");
+      toastInfo(msg: "Login Error");
       print(e);
     }
   }

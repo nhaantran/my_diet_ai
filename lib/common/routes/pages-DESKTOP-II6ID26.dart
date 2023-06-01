@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
-
 import 'package:get/get.dart';
 import 'package:my_diet/view/exercise/exercisebinding.dart';
 import 'package:my_diet/view/exercise/exercisepage.dart';
 import 'package:my_diet/view/food/addmeal/addmealbinding.dart';
 import 'package:my_diet/view/food/addmeal/addmealpage.dart';
-import 'package:my_diet/view/profile/profilebinding.dart';
 import 'package:my_diet/view/profile/profilepage.dart';
+import 'package:my_diet/view/profile/profilepage.dart';
+import 'package:my_diet/view/profile/profilebinding-DESKTOP-II6ID26.dart';
 import 'package:my_diet/view/welcome/welcomebinding.dart';
 import 'package:my_diet/view/welcome/welcomepage.dart';
 import '../../view/application/applicationbinding.dart';
@@ -70,22 +70,22 @@ class AppPages {
         page: () => FoodPage("Breakfast"),
         binding: FoodBinding(),
         transition: Transition.downToUp),
+
     GetPage(
       name: AppRoutes.AddMeal,
       page: () => AddMealPage(),
       binding: AddMealBinding(),
     ),
     GetPage(
-      name: AppRoutes.Profile,
-      page: () => ProfilePage(),
-      binding: ProfileBinding(),
-    ),
+        name: AppRoutes.Profile,
+        page: () => ProfilePage(),
+        binding: ProfileBinding(),
+        transition: Transition.downToUp),
     GetPage(
       name: AppRoutes.Exercise,
       page: () => ExercisePage(),
       binding: ExerciseBinding(),
     ),
-    
     // GetPage(
     //     name: AppRoutes.Contact,
     //     page: () => FoodsPage(),
@@ -95,10 +95,9 @@ class AppPages {
     // 首页
     GetPage(name: AppRoutes.Contact, page: () => ContactPage(), binding: ContactBinding()),
     //消息
-    GetPage(name: AppRoutes.Message, page: () => MessagePage(), binding: MessageBinding()),
-    //我的
-    GetPage(name: AppRoutes.Me, page: () => MePage(), binding: MeBinding()),
-    //聊天详情
+    GetPage(name: AppRoutes.Message, page: () => MessagePage(), binding: MessageBinding()),*/
+
+    /*//聊天详情
     GetPage(name: AppRoutes.Chat, page: () => ChatPage(), binding: ChatBinding()),
 
     GetPage(name: AppRoutes.Photoimgview, page: () => PhotoImgViewPage(), binding: PhotoImgViewBinding()),*/
