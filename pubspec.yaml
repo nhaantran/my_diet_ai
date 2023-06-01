@@ -53,7 +53,6 @@ dependencies:
   package_info_plus: ^4.0.0
   percent_indicator: ^4.2.3
   shared_preferences: ^2.1.0
-  
   syncfusion_flutter_charts: ^21.2.3
 
 dev_dependencies:
@@ -106,6 +105,9 @@ flutter:
   #         weight: 700
   #
   fonts:
+    - family: Pacifico
+      fonts: 
+      - asset: assets/fonts/Pacifico-Regular.ttf
     - family: OpenSans
       fonts:
         - asset: assets/fonts/OpenSans-Italic-VariableFont_wdth,wght.ttf

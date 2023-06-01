@@ -2,17 +2,19 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:my_diet/services/remote_service.dart';
 
+import '../../common/entities/userhealt.dart';
 import '../../common/routes/names.dart';
 import '../../common/values/colors.dart';
+import '../welcome/welcomecontroller.dart';
 
 class ApplicationController extends GetxController {
   ApplicationController();
   var page = 0.obs;
-
+ 
   late final List<String> tabTitles;
   late final PageController pageController;
   late final List<BottomNavigationBarItem> bottomeTabs;
-
+  
   void handlePageChanged(int index) {
     page.value = index;
   }
@@ -23,7 +25,6 @@ class ApplicationController extends GetxController {
 
   void addExerciseNavigation() {
     Get.toNamed(AppRoutes.Exercise);
-    
   }
 
   void addFoodNavigation() {
@@ -36,7 +37,7 @@ class ApplicationController extends GetxController {
   @override
   void onInit() {
     super.onInit();
-    tabTitles = ['1', "2", "3", "4"];
+    tabTitles = ['DashBoard', "2", "3", "4"];
     bottomeTabs = <BottomNavigationBarItem>[
       const BottomNavigationBarItem(
           icon: ImageIcon(

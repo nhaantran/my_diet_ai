@@ -7,6 +7,8 @@ import 'package:my_diet/services/remote_service.dart';
 import '../../common/entities/exercise.dart';
 
 class ExerciseController extends GetxController {
+  var isLoading = true.obs;
+  var startLoading = false.obs;
   var exerciseList = <Exercise>[].obs;
   final TextEditingController exerciseSearchController =
       TextEditingController();

@@ -72,7 +72,6 @@ class AppPages {
         page: () => FoodPage("Breakfast"),
         binding: FoodBinding(),
         transition: Transition.downToUp),
-
     GetPage(
       name: AppRoutes.AddMeal,
       page: () => AddMealPage(),
@@ -88,6 +87,7 @@ class AppPages {
       page: () => ExercisePage(),
       binding: ExerciseBinding(),
     ),
+    
     // GetPage(
     //     name: AppRoutes.Contact,
     //     page: () => FoodsPage(),

@@ -35,17 +35,20 @@ class FoodTile extends StatelessWidget {
             Stack(
               children: [
                 Container(
-                  height: 180,
-                  width: double.infinity,
-                  clipBehavior: Clip.antiAlias,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(4),
-                  ),
-                  child: Image.network(
-                    product.imageFrontSmallUrl != null ? product.imageFrontSmallUrl! : "",
-                    fit: BoxFit.cover,
-                  ),
-                ),
+                    height: 180,
+                    width: double.infinity,
+                    clipBehavior: Clip.antiAlias,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(4),
+                    ),
+                    child: FadeInImage.assetNetwork(
+                      placeholder: 'assets/place_holder.jpg',
+                      image: product.imageFrontSmallUrl.toString(),
+                    )
+                    //   product.imageFrontSmallUrl != null ? product.imageFrontSmallUrl! : "",
+                    //   fit: BoxFit.cover,
+                    // ),
+                    ),
                 // Positioned(
                 //   right: 0,
                 //   child: Obx(() => CircleAvatar(

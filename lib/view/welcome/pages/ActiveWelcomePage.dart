@@ -1,12 +1,13 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:my_diet/view/welcome/welcomecontroller.dart';
 
 import '../../../common/values/colors.dart';
 import '../welcomepage.dart';
 import '../widgets/WelcomeCard.dart';
 
-class ActiveWelcomePage extends StatelessWidget {
+class ActiveWelcomePage extends GetView<WelcomeController> {
   final VoidCallback onTap;
   final VoidCallback back;
   var selectedIndex = 4.obs;
@@ -83,6 +84,7 @@ class ActiveWelcomePage extends StatelessWidget {
                       onTap: () {
                         onTap();
                         changeStatus(0);
+                        controller.exercise.value = 'little';
                       },
                       backgroundColor: selectedIndex.value == 0
                           ? AppColors.brand05
@@ -99,6 +101,7 @@ class ActiveWelcomePage extends StatelessWidget {
                       onTap: () {
                         onTap();
                         changeStatus(1);
+                        controller.exercise.value = 'light';
                       },
                       backgroundColor: selectedIndex.value == 1
                           ? AppColors.brand05
@@ -116,6 +119,7 @@ class ActiveWelcomePage extends StatelessWidget {
                       onTap: () {
                         onTap();
                         changeStatus(2);
+                        controller.exercise.value = 'moderate';
                       },
                       backgroundColor: selectedIndex.value == 2
                           ? AppColors.brand05
@@ -133,6 +137,7 @@ class ActiveWelcomePage extends StatelessWidget {
                       onTap: () {
                         onTap();
                         changeStatus(3);
+                        controller.exercise.value = 'heavy';
                       },
                       backgroundColor: selectedIndex.value == 3
                           ? AppColors.brand05

@@ -5,6 +5,9 @@ import 'package:get/get_state_manager/src/simple/get_controllers.dart';
 import '../welcome/welcomecontroller.dart';
 
 class HomeController extends GetxController {
+  
+  
+
   var baseGoal = 0.0.obs;
   var caloriesFood = 300.obs;
   var caloriesExercise = 0.obs;

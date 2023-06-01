@@ -1,28 +1,31 @@
 import 'dart:convert';
 
 import 'package:http/http.dart' as http;
+import 'package:my_diet/common/entities/food.dart';
 import 'package:openfoodfacts/openfoodfacts.dart';
 
 import '../common/entities/exercise.dart';
+import '../common/entities/searchingfood.dart';
 import '../common/entities/userhealt.dart';
 
 class RemoteService {
-  Future<List<String>?> getFoods() async {
+  Future<List<Food>?> getFoods(String searchingQuery) async {
     var client = http.Client();
-    var query = "100g baked chicken breast";
+    //var query = searchingQuery;
     //var query2 = {"query": query};
     // 'content-type': 'application/x-www-form-urlencoded',
     var url = Uri.parse(
-        "https://nutrition-by-api-ninjas.p.rapidapi.com/v1/nutrition?query=$query");
+        "https://nutrition-by-api-ninjas.p.rapidapi.com/v1/nutrition?query=$searchingQuery");
     var response = await client.get(url, headers: {
       'X-RapidAPI-Key': "6f0370dce0msh71dc0a50b4101f6p1aa036jsnc2ac05370b28",
       'X-RapidAPI-Host': "nutrition-by-api-ninjas.p.rapidapi.com"
     });
     if (response.statusCode == 200) {
-      print(response.body);
-      print("success");
+      
+      var json = response.body;
+      return foodFromJson(json);
     } else {
-      print("failed");
+      return null;
     }
   }
 
@@ -38,7 +41,7 @@ class RemoteService {
       print(json);
       return exerciseFromJson(json);
     } else {
-      print("failed");
+      return null;
     }
   }
 
@@ -46,7 +49,7 @@ class RemoteService {
       int height,
       int weight,
       int goalWeight,
-      int age,
+      String age,
       String gender,
       String goal,
       String exercise) async {
@@ -60,7 +63,7 @@ class RemoteService {
       'height': height.toString(),
       'weight': weight.toString(),
       'goalWeight': goalWeight.toString(),
-      'age': age.toString(),
+      'age': age,
       'gender': gender,
       'goal': goal,
       'exercise': exercise
@@ -81,29 +84,38 @@ class RemoteService {
       //print(json);
       return customerDataFromJson(json);
     } else {
-      print("failed: " + response.statusCode.toString());
+      
+      return null;
+    }
+  }
+
+  Future<SearchingFood?> getSearchingFood(String foodSearch) async {
+    var query = foodSearch;
+    var client = http.Client();
+    var url = Uri.parse(
+        "https://spoonacular-recipe-food-nutrition-v1.p.rapidapi.com/recipes/complexSearch?query=${query}&sort=calories&sortDirection=asc&minCarbs=0&maxCarbs=1000&minProtein=0&maxProtein=1000&minCalories=0&maxCalories=1000&minFat=0&maxFat=1000&number=10");
+    var response = await client.get(
+      url,
+      headers: {
+        'X-RapidAPI-Key': '6f0370dce0msh71dc0a50b4101f6p1aa036jsnc2ac05370b28',
+        'X-RapidAPI-Host': 'spoonacular-recipe-food-nutrition-v1.p.rapidapi.com'
+      },
+    );
+    if (response.statusCode == 200) {
+      var json = response.body;
+      return searchingFoodFromJson(json);
+    } else {
+      print("error");
       return null;
     }
   }
 
   Future<List<Product>?> getFood(String food) async {
-    // ProductQueryConfiguration config = ProductQueryConfiguration(
-    //   '5449000131805',
-    //   version: ProductQueryVersion.v3,
-    // );
-    // ProductResultV3 product = await OpenFoodAPIClient.getProductV3(config);
-    // print(product.product?.productName); // Coca Cola Zero
-    // print(product.product?.brands); // Coca-Cola
-    // print(product.product?.quantity); // 330ml
-    // print(product.product?.nutriments
-    //     ?.getValue(Nutrient.salt, PerSize.oneHundredGrams)); // 0.0212
-    // print(product.product?.additives?.names); // [E150d, E338, E950, E951]
-    // print(product.product?.allergens?.names);
-
     ProductSearchQueryConfiguration configuration =
         ProductSearchQueryConfiguration(
       parametersList: <Parameter>[
         SearchTerms(terms: [food]),
+        const SortBy(option: SortOption.POPULARITY),
       ],
       version: ProductQueryVersion.v3,
     );
@@ -113,6 +125,5 @@ class RemoteService {
       configuration,
     );
     return result.products;
-    
   }
 }

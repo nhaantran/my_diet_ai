@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:get/get.dart';
+import 'package:my_diet/common/entities/exercise.dart';
 import 'package:my_diet/common/routes/names.dart';
 import 'package:my_diet/view/exercise/widget/ExerciseTile.dart';
 
@@ -50,7 +51,9 @@ class ExercisePage extends GetView<ExerciseController> {
                 prefixIcon: const Icon(Icons.search),
                 suffixIcon: IconButton(
                   icon: const Icon(Icons.clear),
-                  onPressed: () {},
+                  onPressed: () {
+                    controller.exerciseSearchController.text = '';
+                  },
                 ),
                 hintText: "Search all exercises...",
                 alignLabelWithHint: true,
@@ -65,16 +68,89 @@ class ExercisePage extends GetView<ExerciseController> {
           ),
           Expanded(
               child: Container(
-            color: AppColors.brand10,
-            child: Obx(() => AlignedGridView.count(
-                  itemCount: controller.exerciseList.length,
-                  crossAxisCount: 4,
-                  mainAxisSpacing: 4,
-                  crossAxisSpacing: 16,
-                  itemBuilder: (context, index) {
-                    return ExerciseTile(controller.exerciseList[index]);
-                  },
-                )),
+            color: AppColors.white,
+            child: Obx(() {
+              if (controller.isLoading.value && controller.startLoading.value) {
+                return const Center(child: CircularProgressIndicator());
+              }
+              return ListView.separated(
+                itemCount: controller.exerciseList.length,
+                itemBuilder: (context, index) {
+                  //var string = controller.foodList[index].name.toString();
+                  return Dismissible(
+                    key: ValueKey<Exercise>(controller.exerciseList[index]),
+                    background: Container(
+                        alignment: Alignment.centerRight,
+                        padding: const EdgeInsets.only(right: 20.0),
+                        color: Colors.red,
+                        child: const Icon(
+                          Icons.delete,
+                          color: AppColors.white,
+                        )),
+                    onDismissed: (DismissDirection direction) {
+                      controller.exerciseList.removeAt(index);
+                      //controller.getTotalCalories();
+                    },
+                    child: ListTile(
+                      isThreeLine: true,
+                      title: Text(
+                        controller.exerciseList[index].name.toUpperCase(),
+                        style: const TextStyle(
+                            fontFamily: "OpenSans",
+                            color: AppColors.brand04,
+                            fontSize: 30),
+                      ),
+                      subtitle: RichText(
+                        text: TextSpan(
+                            style: const TextStyle(fontFamily: "OpenSans"),
+                            children: <TextSpan>[
+                              TextSpan(
+                                  text:
+                                      "${controller.exerciseList[index].caloriesPerHour.toString()} calories\n",
+                                  style: const TextStyle(
+                                    color: AppColors.brand05,
+                                    fontWeight: FontWeight.w600,
+                                  )),
+                              TextSpan(
+                                  text:
+                                      "${controller.exerciseList[index].durationMinutes.toString()} minute",
+                                  style: const TextStyle(
+                                    color: AppColors.brand05,
+                                    fontWeight: FontWeight.w500,
+                                  )),
+                            ]),
+                      ),
+                      trailing: Wrap(children: [
+                        IconButton(
+                            onPressed: () {},
+                            icon: const Icon(Icons.add_box_outlined,
+                                color: AppColors.brand05))
+                      ]),
+                    ),
+                  );
+                },
+                separatorBuilder: (BuildContext context, int index) {
+                  return const Divider(
+                    height: 10,
+                    thickness: 1,
+                  );
+                },
+              );
+
+              // return AlignedGridView.count(
+              //   itemCount: controller.foodList.length,
+              //   crossAxisCount: 2,
+              //   mainAxisSpacing: 4,
+              //   crossAxisSpacing: 16,
+              //   itemBuilder: (context, index) {
+              //     return ListTile(
+              //       title: Text(
+              //           controller.foodList[index].productName.toString()),
+              //     );
+              //     // FoodTile(controller.foodList[index]);
+              //   },
+              // );
+            }),
           )),
         ],
       ),

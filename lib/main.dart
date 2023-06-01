@@ -20,15 +20,15 @@ Future<void> main() async {
     //name: 'login demo project',
     options: DefaultFirebaseOptions.currentPlatform,
   );
-  OpenFoodAPIConfiguration.globalUser = const User(
-    userId: 'myUsername',
-    password: 'myPassword',
-  );
-  OpenFoodAPIConfiguration.globalLanguages = <OpenFoodFactsLanguage>[
-    OpenFoodFactsLanguage.ENGLISH,
-  ];
-  OpenFoodAPIConfiguration.globalCountry = OpenFoodFactsCountry.USA;
-
+  // OpenFoodAPIConfiguration.globalUser = const User(
+  //   userId: 'myUsername',
+  //   password: 'myPassword',
+  // );
+  // OpenFoodAPIConfiguration.globalLanguages = <OpenFoodFactsLanguage>[
+  //   OpenFoodFactsLanguage.ENGLISH,
+  // ];
+  // OpenFoodAPIConfiguration.globalCountry = OpenFoodFactsCountry.USA;
+  
   runApp(const MyApp());
 }
 

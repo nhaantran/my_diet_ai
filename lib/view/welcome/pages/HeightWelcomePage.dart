@@ -108,7 +108,6 @@ class HeightWelcomePage extends GetView<WelcomeController> {
                           ],
                           onValueChange: (value) => {
                             controller.changeHeight(
-                               
                                 value,
                                 )
                           },

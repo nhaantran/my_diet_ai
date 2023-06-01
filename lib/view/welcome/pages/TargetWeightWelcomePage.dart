@@ -109,7 +109,7 @@ class TargetWeightWelcomePage extends GetView<WelcomeController> {
                                 scale: -1),
                           ],
                           onValueChange: (value) => {
-                            controller.changeWeight(
+                            controller.changeGoalWeight(
                               value,
                             )
                           },

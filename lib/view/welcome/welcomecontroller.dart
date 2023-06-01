@@ -9,15 +9,16 @@ class WelcomeController extends GetxController {
   var name = "nhaantran".obs;
   var age = 21.obs;
   var index = 0.obs;
-  var gender = "Male".obs;
+  var gender = "male".obs;
   var goal = "maintenance".obs;
   var exercise = "moderate".obs;
   var progressValue = 0.0.obs;
   var height = 170.obs;
   var goalWeight = 80.obs;
   var weight = 75.obs;
+  final TextEditingController ageInputController = TextEditingController();
 
-  static CustomerData? user;
+  static CustomerData? user ;
 
   changePage(int index) async {
     this.index.value = index;
@@ -25,6 +26,10 @@ class WelcomeController extends GetxController {
   }
 
   changeWeight(int index) async {
+    weight.value = index;
+  }
+
+  changeGoalWeight(int index) async {
     weight.value = index;
   }
 
@@ -48,14 +53,14 @@ class WelcomeController extends GetxController {
     //RemoteService().foodTest();
     Get.offAndToNamed(AppRoutes.SIGN_IN);
   }
-
+  
   getData() async {
     //List<String>? list = await RemoteService().getFoods();
     user = await RemoteService().postHealthInformation(
         height.value,
         weight.value,
         goalWeight.value,
-        age.value,
+        ageInputController.text.toString(),
         gender.value,
         goal.value,
         exercise.value);

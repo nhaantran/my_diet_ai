@@ -67,53 +67,66 @@ class HomePage extends GetView<HomeController> {
                     "assets/icons/logo_my_diet.png",
                   ),
                 )),
-            RichText(
-              text: const TextSpan(
-                  style: TextStyle(fontFamily: "Gothic"),
-                  children: <TextSpan>[
-                    TextSpan(
-                        text: " M",
-                        style: TextStyle(
-                          color: AppColors.brand05,
-                          fontSize: 40,
-                          fontWeight: FontWeight.w300,
-                        )),
-                    TextSpan(
-                        text: "y",
-                        style: TextStyle(
-                          color: AppColors.brand05,
-                          fontSize: 40,
-                          fontWeight: FontWeight.w300,
-                        )),
-                    TextSpan(
-                        text: "D",
-                        style: TextStyle(
-                          color: AppColors.brand05,
-                          fontSize: 40,
-                          fontWeight: FontWeight.w900,
-                        )),
-                    TextSpan(
-                        text: "i",
-                        style: TextStyle(
-                          color: AppColors.brand05,
-                          fontSize: 40,
-                          fontWeight: FontWeight.w900,
-                        )),
-                    TextSpan(
-                        text: "e",
-                        style: TextStyle(
-                          color: AppColors.brand05,
-                          fontSize: 40,
-                          fontWeight: FontWeight.w900,
-                        )),
-                    TextSpan(
-                        text: "t ",
-                        style: TextStyle(
-                          color: AppColors.brand05,
-                          fontSize: 40,
-                          fontWeight: FontWeight.w900,
-                        )),
-                  ]),
+            // RichText(
+            //   text: const TextSpan(
+            //       style: TextStyle(fontFamily: "Gothic"),
+            //       children: <TextSpan>[
+            //         TextSpan(
+            //             text: " M",
+            //             style: TextStyle(
+            //               color: AppColors.brand05,
+            //               fontSize: 40,
+            //               fontWeight: FontWeight.w300,
+            //             )),
+            //         TextSpan(
+            //             text: "y",
+            //             style: TextStyle(
+            //               color: AppColors.brand05,
+            //               fontSize: 40,
+            //               fontWeight: FontWeight.w300,
+            //             )),
+            //         TextSpan(
+            //             text: "D",
+            //             style: TextStyle(
+            //               color: AppColors.brand05,
+            //               fontSize: 40,
+            //               fontWeight: FontWeight.w900,
+            //             )),
+            //         TextSpan(
+            //             text: "i",
+            //             style: TextStyle(
+            //               color: AppColors.brand05,
+            //               fontSize: 40,
+            //               fontWeight: FontWeight.w900,
+            //             )),
+            //         TextSpan(
+            //             text: "e",
+            //             style: TextStyle(
+            //               color: AppColors.brand05,
+            //               fontSize: 40,
+            //               fontWeight: FontWeight.w900,
+            //             )),
+            //         TextSpan(
+            //             text: "t ",
+            //             style: TextStyle(
+            //               color: AppColors.brand05,
+            //               fontSize: 40,
+            //               fontWeight: FontWeight.w900,
+            //             )),
+            //       ]),
+            // ),
+            SizedBox(
+              width: 10.0.w,
+            ),
+            const Text(
+              "MyDiet",
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                color: AppColors.brand05,
+                fontWeight: FontWeight.bold,
+                fontFamily: "Pacifico",
+                fontSize: 30,
+              ),
             ),
           ],
         ),
@@ -411,8 +424,8 @@ class HomePage extends GetView<HomeController> {
                     progressColor: AppColors.white,
                     percent: 0.5,
                     //controller.caloriesFood.value / 100,
-                        // WelcomeController
-                        //     .user!.basalMetabolicRate.hb.calories.value,
+                    // WelcomeController
+                    //     .user!.basalMetabolicRate.hb.calories.value,
                     animateFromLastPercent: true,
                     barRadius: Radius.circular(10),
                     animation: true,

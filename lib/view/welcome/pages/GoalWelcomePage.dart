@@ -3,10 +3,11 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import '../../../common/values/colors.dart';
+import '../welcomecontroller.dart';
 import '../welcomepage.dart';
 import '../widgets/WelcomeCard.dart';
 
-class GoalWelcomePage extends StatelessWidget {
+class GoalWelcomePage extends GetView<WelcomeController> {
   final VoidCallback onTap;
   final VoidCallback back;
   var selectedIndex = 3.obs;
@@ -87,6 +88,7 @@ class GoalWelcomePage extends StatelessWidget {
                         onTap: () {
                           onTap();
                           changeStatus(0);
+                          controller.goal.value = 'maintenance';
                         },
                       ),
                       SimpleButtonCard(
@@ -99,6 +101,7 @@ class GoalWelcomePage extends StatelessWidget {
                         onTap: () {
                           onTap();
                           changeStatus(1);
+                          controller.goal.value = 'moderate fat loss';
                         },
                         iconAssets: AssetImage("assets/icons/loseweight.png"),
                         buttonText: "Lose Weight",
@@ -113,6 +116,7 @@ class GoalWelcomePage extends StatelessWidget {
                         onTap: () {
                           onTap();
                           changeStatus(2);
+                          controller.goal.value = 'normal bulking';
                         },
                         iconAssets: AssetImage("assets/icons/gainweight.png"),
                         buttonText: "Gain Weight",

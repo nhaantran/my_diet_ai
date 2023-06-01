@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 import 'package:my_diet/view/welcome/pages/ActiveWelcomePage.dart';
 import 'package:my_diet/view/welcome/pages/AgeWelcomePage.dart';
 import 'package:my_diet/view/welcome/pages/CurrentWeightWelcomePage.dart';
+import 'package:my_diet/view/welcome/pages/FirstPage.dart';
 import 'package:my_diet/view/welcome/pages/GenderWelcomePage.dart';
 import 'package:my_diet/view/welcome/pages/GoalWelcomePage.dart';
 import 'package:my_diet/view/welcome/pages/HeightWelcomePage.dart';
@@ -106,6 +107,10 @@ class _buildPageView extends GetView<WelcomeController> {
       pageSnapping: true,
       physics: const NeverScrollableScrollPhysics(),
       children: [
+        FirstPage(onTap: () {
+          currentPageIndex = pageController.page!.round();
+          movingNextPage(pageController, currentPageIndex);
+        }),
         KeepAlivePage(
             child: GoalWelcomePage(
           back: () {
@@ -114,7 +119,6 @@ class _buildPageView extends GetView<WelcomeController> {
           },
           onTap: () {
             currentPageIndex = pageController.page!.round();
-            print("current: " + currentPageIndex.toString());
 
             movingNextPage(pageController, currentPageIndex);
           },
@@ -122,12 +126,10 @@ class _buildPageView extends GetView<WelcomeController> {
         KeepAlivePage(
             child: GenderWelcomePage(
           back: () {
-            print("current: " + currentPageIndex.toString());
             currentPageIndex = pageController.page!.round();
             movingPreviousPage(pageController, currentPageIndex);
           },
           onTap: () {
-            print("current: " + currentPageIndex.toString());
             currentPageIndex = pageController.page!.round();
             movingNextPage(pageController, currentPageIndex);
           },

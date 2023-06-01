@@ -3,10 +3,11 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import '../../../common/values/colors.dart';
+import '../welcomecontroller.dart';
 import '../welcomepage.dart';
 import '../widgets/WelcomeCard.dart';
 
-class GenderWelcomePage extends StatelessWidget {
+class GenderWelcomePage extends GetView<WelcomeController> {
   final VoidCallback onTap;
   final VoidCallback back;
   var selectedIndex = 2.obs;
@@ -33,12 +34,12 @@ class GenderWelcomePage extends StatelessWidget {
                   visible: true,
                   child: FloatingActionButton(
                     backgroundColor: AppColors.brand09,
-                      onPressed: () {
-                        back();
-                      },
-                      child: Icon(Icons.arrow_back_ios_new),
-                      foregroundColor: AppColors.brand05,),
-                      
+                    onPressed: () {
+                      back();
+                    },
+                    child: Icon(Icons.arrow_back_ios_new),
+                    foregroundColor: AppColors.brand05,
+                  ),
                 ),
                 Expanded(
                   child: Container(),
@@ -47,11 +48,12 @@ class GenderWelcomePage extends StatelessWidget {
                   visible: selectedIndex != 2,
                   child: FloatingActionButton(
                     backgroundColor: AppColors.brand05,
-                      onPressed: () {
-                        onTap();
-                      },
-                      child: Icon(Icons.arrow_forward_ios),
-                      foregroundColor: AppColors.white,),
+                    onPressed: () {
+                      onTap();
+                    },
+                    child: Icon(Icons.arrow_forward_ios),
+                    foregroundColor: AppColors.white,
+                  ),
                 )
               ],
             ),
@@ -86,6 +88,7 @@ class GenderWelcomePage extends StatelessWidget {
                         onTap: () {
                           onTap();
                           changeStatus(0);
+                          controller.gender.value = "male";
                         },
                       ),
                       SimpleButtonCard(
@@ -98,6 +101,7 @@ class GenderWelcomePage extends StatelessWidget {
                         onTap: () {
                           onTap();
                           changeStatus(1);
+                          controller.gender.value = "female";
                         },
                         iconAssets: AssetImage("assets/icons/female.png"),
                         buttonText: "Female",
