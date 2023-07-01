@@ -7,6 +7,7 @@ import 'package:get/get_state_manager/src/simple/get_view.dart';
 import 'package:my_diet/view/welcome/welcomecontroller.dart';
 
 import '../../../common/values/colors.dart';
+import '../../../common/values/goal.dart';
 
 class TargetWeightWelcomePage extends GetView<WelcomeController> {
   final VoidCallback onTap;
@@ -69,7 +70,7 @@ class TargetWeightWelcomePage extends GetView<WelcomeController> {
                   const Text(
                     "What's your goal weight?",
                     textAlign: TextAlign.center,
-                    style: TextStyle( 
+                    style: TextStyle(
                         color: Colors.black,
                         fontSize: 24,
                         fontFamily: 'Gothic',
@@ -85,8 +86,8 @@ class TargetWeightWelcomePage extends GetView<WelcomeController> {
                           rulerBackgroundColor:
                               AppColors.brand07.withOpacity(0.3),
                           controller: rulerPickerController!,
-                          beginValue: 40,
-                          endValue: 200,
+                          beginValue: controller.beginValue,
+                          endValue: controller.endValue,
                           initValue: controller.weight.value,
                           onBuildRulerScalueText: (index, scaleValue) {
                             return scaleValue.toString();

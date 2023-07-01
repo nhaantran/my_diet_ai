@@ -13,13 +13,15 @@ class SignInPage extends GetView<SignInController> {
   const SignInPage({super.key});
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: AppColors.white,
-      body: Column(
-        children: [
-          AppIntroduction(),
-          signIn(),
-        ],
+    return SafeArea(
+      child: Scaffold(
+        backgroundColor: AppColors.white,
+        body: Column(
+          children: [
+            const AppIntroduction(),
+            signIn(),
+          ],
+        ),
       ),
     );
   }
@@ -87,7 +89,7 @@ class signIn extends GetView<SignInController> {
                     ),
               ),
             ),
-            SizedBox(height: 10.0.h),
+            //SizedBox(height: 10.0.h),
             Row(
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
@@ -97,7 +99,7 @@ class signIn extends GetView<SignInController> {
                 ),
               ],
             ),
-            SizedBox(height: 10.0.h),
+            //SizedBox(height: 10.0.h),
             SizedBox(
               height: 40.h,
               width: double.infinity,

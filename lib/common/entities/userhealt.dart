@@ -10,13 +10,13 @@ CustomerData customerDataFromJson(String str) =>
 String customerDataToJson(CustomerData data) => json.encode(data.toJson());
 
 class CustomerData {
-  String id;
   String height;
   String weight;
   String age;
   String gender;
   String exercise;
   String goalWeight;
+  String goal;
   BodyMassIndex bodyMassIndex;
   BodyFatPercentage bodyFatPercentage;
   BodyFatPercentage leanBodyMass;
@@ -26,13 +26,13 @@ class CustomerData {
   IdealBodyWeight idealBodyWeight;
 
   CustomerData({
-    required this.id,
     required this.height,
     required this.weight,
     required this.age,
     required this.gender,
     required this.exercise,
     required this.goalWeight,
+    required this.goal,
     required this.bodyMassIndex,
     required this.bodyFatPercentage,
     required this.leanBodyMass,
@@ -43,13 +43,13 @@ class CustomerData {
   });
 
   factory CustomerData.fromJson(Map<String, dynamic> json) => CustomerData(
-    id: json["id"],
         height: json["height"],
         weight: json["weight"],
         age: json["age"],
         gender: json["gender"],
         exercise: json["exercise"],
         goalWeight: json["goalWeight"],
+        goal: json["goal"],
         bodyMassIndex: BodyMassIndex.fromJson(json["bodyMassIndex"]),
         bodyFatPercentage:
             BodyFatPercentage.fromJson(json["bodyFatPercentage"]),
@@ -64,13 +64,13 @@ class CustomerData {
       );
 
   Map<String, dynamic> toJson() => {
-    "id":id,
         "height": height,
         "weight": weight,
         "age": age,
         "gender": gender,
         "exercise": exercise,
         "goalWeight": goalWeight,
+        "goal": goal,
         "bodyMassIndex": bodyMassIndex.toJson(),
         "bodyFatPercentage": bodyFatPercentage.toJson(),
         "leanBodyMass": leanBodyMass.toJson(),

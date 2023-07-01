@@ -3,9 +3,20 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import '../../../common/values/colors.dart';
+import '../../../common/values/goal.dart';
 import '../welcomecontroller.dart';
 import '../welcomepage.dart';
 import '../widgets/WelcomeCard.dart';
+
+enum DietPlan {
+  fatloss_moderate,
+  fatloss_aggressive,
+  fatloss_reckless,
+  maintenance,
+  bulking_slow,
+  bulking_normal,
+  bulking_aggressive
+}
 
 class GoalWelcomePage extends GetView<WelcomeController> {
   final VoidCallback onTap;
@@ -88,7 +99,7 @@ class GoalWelcomePage extends GetView<WelcomeController> {
                         onTap: () {
                           onTap();
                           changeStatus(0);
-                          controller.goal.value = 'maintenance';
+                          controller.goal.value = Goal.maintenance;
                         },
                       ),
                       SimpleButtonCard(
@@ -101,7 +112,7 @@ class GoalWelcomePage extends GetView<WelcomeController> {
                         onTap: () {
                           onTap();
                           changeStatus(1);
-                          controller.goal.value = 'moderate fat loss';
+                          controller.goal.value = Goal.loseWeight;
                         },
                         iconAssets: AssetImage("assets/icons/loseweight.png"),
                         buttonText: "Lose Weight",
@@ -116,7 +127,7 @@ class GoalWelcomePage extends GetView<WelcomeController> {
                         onTap: () {
                           onTap();
                           changeStatus(2);
-                          controller.goal.value = 'normal bulking';
+                          controller.goal.value = Goal.gainWeight;
                         },
                         iconAssets: AssetImage("assets/icons/gainweight.png"),
                         buttonText: "Gain Weight",

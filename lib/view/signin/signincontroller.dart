@@ -4,8 +4,11 @@ import 'package:get/get.dart';
 import 'package:get/get_state_manager/src/simple/get_controllers.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:my_diet/common/entities/entities.dart';
+import 'package:my_diet/common/store/config.dart';
 import 'package:my_diet/common/store/user.dart';
+import 'package:my_diet/common/values/formula.dart';
 import 'package:my_diet/common/widgets/toast.dart';
+import 'package:my_diet/view/welcome/welcomecontroller.dart';
 
 import '../../common/routes/names.dart';
 
@@ -55,6 +58,8 @@ class SignInController extends GetxController {
               location: "",
               fcmtoken: "",
               addtime: Timestamp.now());
+          //WelcomeController.user!.id = id;
+          print(WelcomeController.user!.toJson());
 
           await db
               .collection("users")
@@ -64,13 +69,26 @@ class SignInController extends GetxController {
                     userdata.toFirestore(),
               )
               .add(data);
+
+          await db
+              .collection("usersHealth")
+              .doc(id)
+              .set(WelcomeController.user!.toJson());
+              await db
+              .collection("usersHealth")
+              .doc(id)
+              .update({
+                "waterIntake": num.parse((double.parse(WelcomeController.user!.weight) * Formula.WATER_INTAKE).toStringAsFixed(1)),
+              });
         }
+
         toastInfo(msg: "Login Success");
+        await ConfigStore.to.saveAlreadyOpen();
         Get.offAndToNamed(AppRoutes.Application);
       }
     } catch (e) {
       toastInfo(msg: "Login Failed");
-      print(e);
+      print("ERROR: " + e.toString());
     }
   }
 

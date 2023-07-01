@@ -25,16 +25,18 @@ class WelcomePage extends StatefulWidget {
 class _WelcomePageState extends State<WelcomePage> {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-        backgroundColor: Colors.white,
-        body: SizedBox(
-          width: double.infinity,
-          height: double.infinity,
-          child: Stack(alignment: Alignment.topCenter, children: [
-            _buildPageView(),
-            _buildDotIndicator(),
-          ]),
-        ));
+    return SafeArea(
+      child: Scaffold(
+          backgroundColor: Colors.white,
+          body: SizedBox(
+            width: double.infinity,
+            height: double.infinity,
+            child: Stack(alignment: Alignment.topCenter, children: [
+              _buildPageView(),
+              _buildDotIndicator(),
+            ]),
+          )),
+    );
   }
 }
 
@@ -42,7 +44,7 @@ class _buildDotIndicator extends GetView<WelcomeController> {
   @override
   Widget build(BuildContext context) {
     return Obx(() => Positioned(
-        top: 100,
+        top: 50,
         width: 120.w,
         height: 10.h,
         child: ClipRRect(

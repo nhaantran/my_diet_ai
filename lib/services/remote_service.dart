@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:http/http.dart' as http;
 import 'package:my_diet/common/entities/food.dart';
+import 'package:my_diet/view/home/homecontroller.dart';
 import 'package:openfoodfacts/openfoodfacts.dart';
 
 import '../common/entities/exercise.dart';
@@ -9,7 +10,7 @@ import '../common/entities/searchingfood.dart';
 import '../common/entities/userhealt.dart';
 
 class RemoteService {
-  Future<List<Food>?> getFoods(String searchingQuery) async {
+  Future<List<Food>?> getFoodsFromShortcut(String searchingQuery) async {
     var client = http.Client();
     //var query = searchingQuery;
     //var query2 = {"query": query};
@@ -21,7 +22,6 @@ class RemoteService {
       'X-RapidAPI-Host': "nutrition-by-api-ninjas.p.rapidapi.com"
     });
     if (response.statusCode == 200) {
-      
       var json = response.body;
       return foodFromJson(json);
     } else {
@@ -29,16 +29,17 @@ class RemoteService {
     }
   }
 
-  Future<List<Exercise>?> getExercise(String query) async {
+  Future<List<Exercise>?> getExercise(String query, int duration) async {
     var client = http.Client();
+
     var url = Uri.parse(
-        "https://api.api-ninjas.com/v1/caloriesburned?activity=${query}");
+        "https://api.api-ninjas.com/v1/caloriesburned?activity=${query}&weight=${HomeController().weight.value}&duration=$duration");
     var response = await client.get(url, headers: {
       'X-API-Key': 'C2JCb8AqK8A+1OWlEQVH1Q==nELYCot0cFL4LBnD',
     });
     if (response.statusCode == 200) {
       var json = response.body;
-      print(json);
+      print("JSON: ${json}");
       return exerciseFromJson(json);
     } else {
       return null;
@@ -55,11 +56,10 @@ class RemoteService {
       String exercise) async {
     var client = http.Client();
     var url = Uri.parse("https://fitness-api.p.rapidapi.com/fitness/");
-    var payload =
-        "height=190&weight=80&age=30&gender=male&exercise=little&goal=maintenance&deficit=500&goalWeight=85";
+    // var payload =
+    //     "height=190&weight=80&age=30&gender=male&exercise=little&goal=maintenance&deficit=500&goalWeight=85";
 
     var information = {
-      'id': "null",
       'height': height.toString(),
       'weight': weight.toString(),
       'goalWeight': goalWeight.toString(),
@@ -78,13 +78,14 @@ class RemoteService {
         body: json.encode(information));
     if (response.statusCode == 201 || response.statusCode == 200) {
       var json = response.body;
+      print("JSON: ${json}");
       //CustomerData example = customerDataFromJson(json);
       // print(
       //     "BMR: " + example.basalMetabolicRate.bmi!.calories.value.toString());
       //print(json);
+
       return customerDataFromJson(json);
     } else {
-      
       return null;
     }
   }
@@ -110,20 +111,44 @@ class RemoteService {
     }
   }
 
-  Future<List<Product>?> getFood(String food) async {
+  getFoodfromBarCode(String code) async {
+    ProductSearchQueryConfiguration configuration =
+        ProductSearchQueryConfiguration(
+      parametersList: <Parameter>[
+        BarcodeParameter(code),
+        const SortBy(option: SortOption.POPULARITY),
+        const PageSize(size: 10)
+      ],
+      language: OpenFoodFactsLanguage.ENGLISH,
+      version: ProductQueryVersion.v3,
+    );
+
+    SearchResult result = await OpenFoodAPIClient.searchProducts(
+      const User(userId: '', password: ''),
+      configuration,
+    );
+    if (result.products!.isNotEmpty) {
+      return result.products!.first;
+    }
+  }
+
+  Future<List<Product>?> getFoodfromFinding(String food) async {
     ProductSearchQueryConfiguration configuration =
         ProductSearchQueryConfiguration(
       parametersList: <Parameter>[
         SearchTerms(terms: [food]),
         const SortBy(option: SortOption.POPULARITY),
+        const PageSize(size: 10)
       ],
+      language: OpenFoodFactsLanguage.ENGLISH,
       version: ProductQueryVersion.v3,
     );
 
     SearchResult result = await OpenFoodAPIClient.searchProducts(
-      User(userId: '', password: ''),
+      const User(userId: '', password: ''),
       configuration,
     );
+
     return result.products;
   }
 }

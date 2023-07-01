@@ -1,6 +1,7 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:my_diet/common/values/exercise.dart';
 import 'package:my_diet/view/welcome/welcomecontroller.dart';
 
 import '../../../common/values/colors.dart';
@@ -84,7 +85,7 @@ class ActiveWelcomePage extends GetView<WelcomeController> {
                       onTap: () {
                         onTap();
                         changeStatus(0);
-                        controller.exercise.value = 'little';
+                        controller.exercise.value = Exercise.little;
                       },
                       backgroundColor: selectedIndex.value == 0
                           ? AppColors.brand05
@@ -101,7 +102,7 @@ class ActiveWelcomePage extends GetView<WelcomeController> {
                       onTap: () {
                         onTap();
                         changeStatus(1);
-                        controller.exercise.value = 'light';
+                        controller.exercise.value = Exercise.light;
                       },
                       backgroundColor: selectedIndex.value == 1
                           ? AppColors.brand05
@@ -119,7 +120,7 @@ class ActiveWelcomePage extends GetView<WelcomeController> {
                       onTap: () {
                         onTap();
                         changeStatus(2);
-                        controller.exercise.value = 'moderate';
+                        controller.exercise.value = Exercise.moderate;
                       },
                       backgroundColor: selectedIndex.value == 2
                           ? AppColors.brand05
@@ -137,7 +138,7 @@ class ActiveWelcomePage extends GetView<WelcomeController> {
                       onTap: () {
                         onTap();
                         changeStatus(3);
-                        controller.exercise.value = 'heavy';
+                        controller.exercise.value = Exercise.heavy;
                       },
                       backgroundColor: selectedIndex.value == 3
                           ? AppColors.brand05

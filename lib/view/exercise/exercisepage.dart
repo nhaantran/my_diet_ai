@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
@@ -10,8 +11,9 @@ import '../../common/values/colors.dart';
 import 'exercisecontroller.dart';
 
 class ExercisePage extends GetView<ExerciseController> {
-  const ExercisePage({super.key});
-
+  ExercisePage({super.key});
+  final CollectionReference _user =
+      FirebaseFirestore.instance.collection('users');
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -43,7 +45,7 @@ class ExercisePage extends GetView<ExerciseController> {
             padding: const EdgeInsets.all(10.0),
             child: TextField(
               onEditingComplete: () {
-                controller.loadData();
+                controller.openBottomPicker(context);
                 //print(controller.exerciseSearchController.text);
               },
               controller: controller.exerciseSearchController,
@@ -73,10 +75,10 @@ class ExercisePage extends GetView<ExerciseController> {
               if (controller.isLoading.value && controller.startLoading.value) {
                 return const Center(child: CircularProgressIndicator());
               }
+
               return ListView.separated(
                 itemCount: controller.exerciseList.length,
                 itemBuilder: (context, index) {
-                  //var string = controller.foodList[index].name.toString();
                   return Dismissible(
                     key: ValueKey<Exercise>(controller.exerciseList[index]),
                     background: Container(
@@ -122,7 +124,10 @@ class ExercisePage extends GetView<ExerciseController> {
                       ),
                       trailing: Wrap(children: [
                         IconButton(
-                            onPressed: () {},
+                            onPressed: () {
+                              controller
+                                  .logExercise(controller.exerciseList[index]);
+                            },
                             icon: const Icon(Icons.add_box_outlined,
                                 color: AppColors.brand05))
                       ]),
@@ -136,20 +141,6 @@ class ExercisePage extends GetView<ExerciseController> {
                   );
                 },
               );
-
-              // return AlignedGridView.count(
-              //   itemCount: controller.foodList.length,
-              //   crossAxisCount: 2,
-              //   mainAxisSpacing: 4,
-              //   crossAxisSpacing: 16,
-              //   itemBuilder: (context, index) {
-              //     return ListTile(
-              //       title: Text(
-              //           controller.foodList[index].productName.toString()),
-              //     );
-              //     // FoodTile(controller.foodList[index]);
-              //   },
-              // );
             }),
           )),
         ],

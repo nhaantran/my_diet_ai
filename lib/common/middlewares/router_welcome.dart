@@ -16,7 +16,7 @@ class RouteWelcomeMiddleware extends GetMiddleware {
 
   @override
   RouteSettings? redirect(String? route) {
-    print(ConfigStore.to.isFirstOpen);
+    print("isFirstOpen: ${ConfigStore.to.isFirstOpen}");
     if (ConfigStore.to.isFirstOpen == false) {
       return null;
     } else if (UserStore.to.isLogin == true) {

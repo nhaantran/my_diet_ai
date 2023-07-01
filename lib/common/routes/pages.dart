@@ -5,7 +5,6 @@ import 'package:my_diet/view/exercise/exercisepage.dart';
 import 'package:my_diet/view/food/addmeal/addmealbinding.dart';
 import 'package:my_diet/view/food/addmeal/addmealpage.dart';
 import 'package:my_diet/view/profile/profilepage.dart';
-import 'package:my_diet/view/profile/profilepage.dart';
 import 'package:my_diet/view/profile/profilebinding.dart';
 import 'package:my_diet/view/welcome/welcomebinding.dart';
 import 'package:my_diet/view/welcome/welcomepage.dart';
@@ -18,6 +17,8 @@ import '../../view/signin/signinpage.dart';
 import '../../view/signup/signupbinding.dart';
 import '../../view/signup/signuppage.dart';
 
+import '../middlewares/router_auth.dart';
+import '../middlewares/router_welcome.dart';
 import 'routes.dart';
 
 class AppPages {
@@ -31,9 +32,9 @@ class AppPages {
       name: AppRoutes.INITIAL,
       page: () => WelcomePage(),
       binding: WelcomeBinding(),
-      // middlewares: [
-      //   RouteWelcomeMiddleware(priority: 0),
-      // ]
+      middlewares: [
+        RouteWelcomeMiddleware(priority: 1),
+      ]
     ),
 
     GetPage(
@@ -61,9 +62,9 @@ class AppPages {
       page: () => ApplicationPage(),
       binding: ApplicationBinding(),
       transition: Transition.native,
-      middlewares: [
-        //RouteAuthMiddleware(priority: 1),
-      ],
+      // middlewares: [
+      //   RouteAuthMiddleware(priority: 1),
+      // ],
     ),
     GetPage(
         name: AppRoutes.Food,

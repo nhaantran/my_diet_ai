@@ -172,78 +172,81 @@ class ProfilePage extends GetView<ProfileController> {
       color: AppColors.white,
       shadowColor: AppColors.white,
       borderRadius: BorderRadius.circular(20),
-      child: Container(
-          padding: EdgeInsets.all(20.0),
-          width: 336.w,
-          height: 250.h,
-          alignment: Alignment.topLeft,
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              const Row(crossAxisAlignment: CrossAxisAlignment.end, children: [
-                Icon(
-                  Icons.person,
-                  color: AppColors.success,
-                  size: 32.0,
+      child: Expanded(
+        child: Container(
+            padding: EdgeInsets.all(20.0),
+            width: 336.w,
+            alignment: Alignment.topLeft,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                const Row(
+                    crossAxisAlignment: CrossAxisAlignment.end,
+                    children: [
+                      Icon(
+                        Icons.person,
+                        color: AppColors.success,
+                        size: 32.0,
+                      ),
+                      SizedBox(
+                        width: 15.0,
+                      ),
+                      Text(
+                        "Personal",
+                        style: TextStyle(
+                            color: AppColors.fontDark,
+                            fontSize: 22,
+                            fontWeight: FontWeight.bold,
+                            fontFamily: "Gothic"),
+                      )
+                    ]),
+                ListTile(
+                  //tileColor: AppColors.fontMid,
+                  titleAlignment: ListTileTitleAlignment.center,
+                  title: const Text("Personal details"),
+                  textColor: AppColors.fontMid,
+                  trailing: IconButton(
+                    icon: const Icon(Icons.arrow_forward_ios),
+                    onPressed: () {},
+                  ),
+                  iconColor: AppColors.fontMid,
                 ),
-                SizedBox(
-                  width: 15.0,
+                ListTile(
+                  //tileColor: AppColors.fontMid,
+                  titleAlignment: ListTileTitleAlignment.center,
+                  title: const Text("Goals"),
+                  textColor: AppColors.fontMid,
+                  trailing: IconButton(
+                    icon: const Icon(Icons.arrow_forward_ios),
+                    onPressed: () {},
+                  ),
+                  iconColor: AppColors.fontMid,
                 ),
-                Text(
-                  "Personal",
-                  style: TextStyle(
-                      color: AppColors.fontDark,
-                      fontSize: 22,
-                      fontWeight: FontWeight.bold,
-                      fontFamily: "Gothic"),
-                )
-              ]),
-              ListTile(
-                //tileColor: AppColors.fontMid,
-                titleAlignment: ListTileTitleAlignment.center,
-                title: const Text("Personal details"),
-                textColor: AppColors.fontMid,
-                trailing: IconButton(
-                  icon: const Icon(Icons.arrow_forward_ios),
-                  onPressed: () {},
+                ListTile(
+                  //tileColor: AppColors.fontMid,
+                  titleAlignment: ListTileTitleAlignment.center,
+                  title: const Text("Water"),
+                  textColor: AppColors.fontMid,
+                  trailing: IconButton(
+                    icon: const Icon(Icons.arrow_forward_ios),
+                    onPressed: () {},
+                  ),
+                  iconColor: AppColors.fontMid,
                 ),
-                iconColor: AppColors.fontMid,
-              ),
-              ListTile(
-                //tileColor: AppColors.fontMid,
-                titleAlignment: ListTileTitleAlignment.center,
-                title: const Text("Goals"),
-                textColor: AppColors.fontMid,
-                trailing: IconButton(
-                  icon: const Icon(Icons.arrow_forward_ios),
-                  onPressed: () {},
+                ListTile(
+                  //tileColor: AppColors.fontMid,
+                  titleAlignment: ListTileTitleAlignment.center,
+                  title: const Text("Activity"),
+                  textColor: AppColors.fontMid,
+                  trailing: IconButton(
+                    icon: const Icon(Icons.arrow_forward_ios),
+                    onPressed: () {},
+                  ),
+                  iconColor: AppColors.fontMid,
                 ),
-                iconColor: AppColors.fontMid,
-              ),
-              ListTile(
-                //tileColor: AppColors.fontMid,
-                titleAlignment: ListTileTitleAlignment.center,
-                title: const Text("Water"),
-                textColor: AppColors.fontMid,
-                trailing: IconButton(
-                  icon: const Icon(Icons.arrow_forward_ios),
-                  onPressed: () {},
-                ),
-                iconColor: AppColors.fontMid,
-              ),
-              ListTile(
-                //tileColor: AppColors.fontMid,
-                titleAlignment: ListTileTitleAlignment.center,
-                title: const Text("Activity"),
-                textColor: AppColors.fontMid,
-                trailing: IconButton(
-                  icon: const Icon(Icons.arrow_forward_ios),
-                  onPressed: () {},
-                ),
-                iconColor: AppColors.fontMid,
-              ),
-            ],
-          )),
+              ],
+            )),
+      ),
     );
   }
 

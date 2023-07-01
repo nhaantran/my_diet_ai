@@ -4,8 +4,12 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:get/get.dart';
 import 'package:my_diet/common/entities/food.dart';
+import 'package:my_diet/view/food/addmeal/addmealbinding.dart';
+import 'package:my_diet/view/food/addmeal/addmealcontroller.dart';
+import 'package:my_diet/view/food/addmeal/addmealpage.dart';
 
 import 'package:my_diet/view/food/foodcontroller.dart';
+import 'package:openfoodfacts/openfoodfacts.dart';
 import 'package:percent_indicator/percent_indicator.dart';
 
 import '../../common/routes/names.dart';
@@ -14,14 +18,12 @@ import '../exercise/widget/ExerciseTile.dart';
 import 'FoodTile.dart';
 
 class FoodPage extends GetView<FoodController> {
-  FoodPage(
-    this.mealTime,
-  );
+  FoodPage(this.mealTime, {super.key});
   String mealTime;
   @override
   Widget build(BuildContext context) {
     if (mealTime != null) {
-      controller.selectedMealTime.value = mealTime as String;
+      FoodController.selectedMealTime.value = mealTime as String;
     }
     return Scaffold(
         appBar: AppBar(
@@ -39,9 +41,9 @@ class FoodPage extends GetView<FoodController> {
               child: DropdownButton(
                 elevation: 0,
                 iconEnabledColor: AppColors.brand05,
-                value: controller.selectedMealTime.isEmpty
+                value: FoodController.selectedMealTime.isEmpty
                     ? "Breakfast"
-                    : controller.selectedMealTime.value,
+                    : FoodController.selectedMealTime.value,
                 items: controller.mealTime
                     .map<DropdownMenuItem<String>>((String value) {
                   return DropdownMenuItem<String>(
@@ -66,227 +68,8 @@ class FoodPage extends GetView<FoodController> {
             crossAxisAlignment: CrossAxisAlignment.center,
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
-              Row(
-                children: [
-                  Column(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      Padding(
-                        padding: EdgeInsets.all(5.0.w),
-                        child: const Text(
-                          "Amount",
-                          style: TextStyle(
-                            fontFamily: "OpenSans",
-                          ),
-                        ),
-                      ),
-                      Container(
-                        height: 70.h,
-                        width: 100.w,
-                        padding: const EdgeInsets.all(10.0),
-                        child: Form(
-                          key: controller.amountFormKey,
-                          child: TextFormField(
-                            keyboardType: TextInputType.number,
-                            validator: (value) {
-                              if (value!.isEmpty) {
-                                return 'Can\' not be empty';
-                              } else if (int.parse(value) <= 0) {
-                                return 'Have to be greater than 0';
-                              }
-                              return null;
-                            },
-                            onEditingComplete: () {
-                              if (controller.amountFormKey.currentState!
-                                  .validate()) {
-                                FocusScope.of(context)
-                                    .requestFocus(FocusNode());
-                              }
-                            },
-                            controller: controller.amountInputController,
-                            decoration: InputDecoration(
-                              alignLabelWithHint: true,
-                              border: const OutlineInputBorder(),
-                              enabledBorder: OutlineInputBorder(
-                                  borderSide: const BorderSide(
-                                      width: 1, color: AppColors.brand05),
-                                  borderRadius:
-                                      BorderRadius.circular(20.0) //<-- SEE HERE
-                                  ),
-                            ),
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                  Expanded(
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        Padding(
-                          padding: EdgeInsets.all(5.0.w),
-                          child: const Text(
-                            "Unit",
-                            style: TextStyle(
-                              fontFamily: "OpenSans",
-                            ),
-                          ),
-                        ),
-                        SizedBox(
-                          //width: 150.w,
-                          height: 70.h,
-                          child: Center(
-                            child: Obx(
-                              () => DropdownButtonHideUnderline(
-                                child: DropdownButton(
-                                  elevation: 0,
-                                  iconEnabledColor: AppColors.brand05,
-                                  value: controller.selectedUnit.isEmpty
-                                      ? "gram"
-                                      : controller.selectedUnit.value,
-                                  items: controller.unit
-                                      .map<DropdownMenuItem<String>>(
-                                          (String value) {
-                                    return DropdownMenuItem<String>(
-                                      value: value,
-                                      child: Text(value),
-                                    );
-                                  }).toList(),
-                                  onChanged: (value) {
-                                    controller.onUnitChanged(value as String);
-                                  },
-                                  style: const TextStyle(
-                                      color: AppColors.brand05, fontSize: 16),
-                                ),
-                              ),
-                            ),
-                          ),
-                        )
-                      ],
-                    ),
-                  ),
-                  Column(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      Padding(
-                        padding: EdgeInsets.all(5.0.w),
-                        child: const Text(
-                          "Food",
-                          style: TextStyle(
-                            fontFamily: "OpenSans",
-                          ),
-                        ),
-                      ),
-                      Container(
-                        width: 150.w,
-                        height: 70.h,
-                        padding: const EdgeInsets.all(10.0),
-                        child: Form(
-                          key: controller.nameFormKey,
-                          child: TextFormField(
-                            keyboardType: TextInputType.name,
-                            onEditingComplete: () {
-                              if (controller.nameFormKey.currentState!
-                                  .validate()) {
-                                FocusScope.of(context)
-                                    .requestFocus(FocusNode());
-                              }
-                            },
-                            validator: (value) {
-                              if (value!.isEmpty) {
-                                return 'Can\' not be empty';
-                              }
-                              return null;
-                            },
-                            controller: controller.foodInputController,
-                            decoration: InputDecoration(
-                              //hintText: "Input the foods",
-                              alignLabelWithHint: true,
-                              border: const OutlineInputBorder(),
-                              enabledBorder: OutlineInputBorder(
-                                  borderSide: const BorderSide(
-                                      width: 1, color: AppColors.brand05),
-                                  borderRadius:
-                                      BorderRadius.circular(20.0) //<-- SEE HERE
-                                  ),
-                            ),
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                  Column(
-                    children: [
-                      const Text(""),
-                      SizedBox(
-                        height: 70.0.h,
-                        child: IconButton(
-                            onPressed: () {
-                              if (controller.amountFormKey.currentState!
-                                      .validate() &&
-                                  controller.nameFormKey.currentState!
-                                      .validate()) {
-                                controller.getResultFromShortcut();
-                                controller.foodInputController.clear();
-                                controller.amountInputController.clear();
-                              } else {
-                                Get.snackbar(
-                                  "Failed",
-                                  "Please input corrected value",
-                                  icon: const Icon(Icons.warning,
-                                      color: Colors.red),
-                                  snackPosition: SnackPosition.TOP,
-                                );
-                              }
-                              //controller.getTotalCalories();
-                            },
-                            icon: const Icon(
-                              Icons.add_box_outlined,
-                              size: 32.0,
-                              color: AppColors.brand05,
-                            )),
-                      ),
-                    ],
-                  )
-                ],
-              ),
-
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.all(10.0),
-                    child: Container(
-                        height: 24.h,
-                        width: 24.w,
-                        decoration: BoxDecoration(
-                            color: AppColors.fontMid,
-                            borderRadius: BorderRadius.circular(100)),
-                        child: const Icon(
-                          Icons.question_mark,
-                          size: 16.0,
-                          color: AppColors.white,
-                        )),
-                  ),
-                  const Expanded(
-                    child: Text(
-                      "E.g. 2 bowl white rice, 200 gram baked chicken, 2 eggs, 1 bowl salad, 10 gram mayonnaise",
-                      style: TextStyle(
-                          color: AppColors.fontMid,
-                          fontFamily: 'OpenSans',
-                          fontWeight: FontWeight.w500),
-                    ),
-                  )
-                ],
-              ),
-
-              // _tabBar(),
-
-              // _tabBarView(),
+              _tabBar(),
+              _tabBarView(context),
               Expanded(
                   child: Container(
                 color: AppColors.white,
@@ -296,11 +79,11 @@ class FoodPage extends GetView<FoodController> {
                     return const Center(child: CircularProgressIndicator());
                   }
                   return ListView.separated(
-                    itemCount: controller.foodList.length,
+                    itemCount: FoodController.foodList.length,
                     itemBuilder: (context, index) {
                       //var string = controller.foodList[index].name.toString();
                       return Dismissible(
-                        key: ValueKey<Food>(controller.foodList[index]),
+                        key: ValueKey<Food>(FoodController.foodList[index]),
                         background: Container(
                             alignment: Alignment.centerRight,
                             padding: const EdgeInsets.only(right: 20.0),
@@ -310,13 +93,13 @@ class FoodPage extends GetView<FoodController> {
                               color: AppColors.white,
                             )),
                         onDismissed: (DismissDirection direction) {
-                          controller.foodList.removeAt(index);
+                          FoodController.foodList.removeAt(index);
                           controller.getTotalCalories();
                         },
                         child: ListTile(
                           isThreeLine: true,
                           title: Text(
-                            controller.foodList[index].name.toUpperCase(),
+                            FoodController.foodList[index].name.toUpperCase(),
                             style: const TextStyle(
                                 fontFamily: "OpenSans",
                                 color: AppColors.brand04,
@@ -328,14 +111,14 @@ class FoodPage extends GetView<FoodController> {
                                 children: <TextSpan>[
                                   TextSpan(
                                       text:
-                                          "${controller.foodList[index].calories.toString()} calories\n",
+                                          "${FoodController.foodList[index].calories.toString()} calories\n",
                                       style: const TextStyle(
                                         color: AppColors.brand05,
                                         fontWeight: FontWeight.w600,
                                       )),
                                   TextSpan(
                                       text:
-                                          "${controller.foodList[index].servingSizeG.toString()} gram",
+                                          "${FoodController.foodList[index].servingSizeG.toString()} gram",
                                       style: const TextStyle(
                                         color: AppColors.brand05,
                                         fontWeight: FontWeight.w500,
@@ -347,19 +130,19 @@ class FoodPage extends GetView<FoodController> {
                               crossAxisAlignment: CrossAxisAlignment.end,
                               children: [
                                 Text(
-                                  "${controller.foodList[index].carbohydratesTotalG.toStringAsFixed(1)} carbs",
+                                  "${FoodController.foodList[index].carbohydratesTotalG.toStringAsFixed(1)} carbs",
                                   style: const TextStyle(
                                       color: AppColors.fontMid,
                                       fontFamily: "OpenSans"),
                                 ),
                                 Text(
-                                  "${controller.foodList[index].proteinG.toStringAsFixed(1)} pros",
+                                  "${FoodController.foodList[index].proteinG.toStringAsFixed(1)} pros",
                                   style: const TextStyle(
                                       color: AppColors.fontMid,
                                       fontFamily: "OpenSans"),
                                 ),
                                 Text(
-                                  "${controller.foodList[index].fatTotalG.toStringAsFixed(1)} fats",
+                                  "${FoodController.foodList[index].fatTotalG.toStringAsFixed(1)} fats",
                                   style: const TextStyle(
                                       color: AppColors.fontMid,
                                       fontFamily: "OpenSans"),
@@ -484,7 +267,9 @@ class FoodPage extends GetView<FoodController> {
                         children: [
                           MaterialButton(
                               color: AppColors.brand05,
-                              onPressed: () {},
+                              onPressed: () async {
+                                await controller.logfood();
+                              },
                               child: const Text(
                                 "Log food",
                                 style: TextStyle(color: AppColors.white),
@@ -517,17 +302,17 @@ class FoodPage extends GetView<FoodController> {
               ),
               tabs: const [
                 Tab(
-                  text: "All",
+                  text: "Quick shortcut",
                 ),
                 Tab(
-                  text: "Foods",
+                  text: "Finding foods",
                 ),
-                Tab(
-                  text: "Meals",
-                ),
-                Tab(
-                  text: "Receipe",
-                )
+                // Tab(
+                //   text: "Meals",
+                // ),
+                // Tab(
+                //   text: "Receipe",
+                // )
               ],
             ),
           ],
@@ -605,15 +390,14 @@ class FoodPage extends GetView<FoodController> {
     );
   }
 
-  scanMealFunction() {
-    print("Scan meal");
-  }
+  scanMealFunction() {}
 
   scanBarCodeFunction() {
     print("Scan bar code");
   }
 
   createFoodFunction() {
+    Get.toNamed(AppRoutes.AddMeal);
     print("Create food");
   }
 
@@ -622,46 +406,471 @@ class FoodPage extends GetView<FoodController> {
     print("Create meal");
   }
 
-  createRecipeFunction() {
-    print("Create recipe");
-  }
+  createRecipeFunction() {}
 
   discoverFunction() {
     print("Discover...");
   }
 
-  Widget _tabBarView() {
-    return Expanded(
+  Widget _quickShortcut(BuildContext context) {
+    return Column(
+      children: [
+        Row(
+          children: [
+            Column(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Padding(
+                  padding: EdgeInsets.all(5.0.w),
+                  child: const Text(
+                    "Amount",
+                    style: TextStyle(
+                      fontFamily: "OpenSans",
+                    ),
+                  ),
+                ),
+                Container(
+                  height: 70.h,
+                  width: 100.w,
+                  padding: const EdgeInsets.all(10.0),
+                  child: Form(
+                    key: controller.amountFormKey,
+                    child: TextFormField(
+                      keyboardType: TextInputType.number,
+                      validator: (value) {
+                        if (value!.isEmpty) {
+                          return 'Can\' not be empty';
+                        } else if (int.parse(value) <= 0) {
+                          return 'Have to be greater than 0';
+                        }
+                        return null;
+                      },
+                      onEditingComplete: () {
+                        if (controller.amountFormKey.currentState!.validate()) {
+                          FocusScope.of(context).requestFocus(FocusNode());
+                        }
+                      },
+                      controller: controller.amountInputController,
+                      decoration: InputDecoration(
+                        alignLabelWithHint: true,
+                        border: const OutlineInputBorder(),
+                        enabledBorder: OutlineInputBorder(
+                            borderSide: const BorderSide(
+                                width: 1, color: AppColors.brand05),
+                            borderRadius:
+                                BorderRadius.circular(20.0) //<-- SEE HERE
+                            ),
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+            Expanded(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Padding(
+                    padding: EdgeInsets.all(5.0.w),
+                    child: const Text(
+                      "Unit",
+                      style: TextStyle(
+                        fontFamily: "OpenSans",
+                      ),
+                    ),
+                  ),
+                  SizedBox(
+                    //width: 150.w,
+                    height: 70.h,
+                    child: Center(
+                      child: Obx(
+                        () => DropdownButtonHideUnderline(
+                          child: DropdownButton(
+                            elevation: 0,
+                            iconEnabledColor: AppColors.brand05,
+                            value: FoodController.selectedUnit.isEmpty
+                                ? "gram"
+                                : FoodController.selectedUnit.value,
+                            items: controller.unit
+                                .map<DropdownMenuItem<String>>((String value) {
+                              return DropdownMenuItem<String>(
+                                value: value,
+                                child: Text(value),
+                              );
+                            }).toList(),
+                            onChanged: (value) {
+                              controller.onUnitChanged(value as String);
+                            },
+                            style: const TextStyle(
+                                color: AppColors.brand05, fontSize: 16),
+                          ),
+                        ),
+                      ),
+                    ),
+                  )
+                ],
+              ),
+            ),
+            Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Padding(
+                  padding: EdgeInsets.all(5.0.w),
+                  child: const Text(
+                    "Food",
+                    style: TextStyle(
+                      fontFamily: "OpenSans",
+                    ),
+                  ),
+                ),
+                Container(
+                  width: 150.w,
+                  height: 70.h,
+                  padding: const EdgeInsets.all(10.0),
+                  child: Form(
+                    key: controller.nameFormKey,
+                    child: TextFormField(
+                      keyboardType: TextInputType.name,
+                      onEditingComplete: () {
+                        if (controller.nameFormKey.currentState!.validate()) {
+                          FocusScope.of(context).requestFocus(FocusNode());
+                        }
+                      },
+                      validator: (value) {
+                        if (value!.isEmpty) {
+                          return 'Can\' not be empty';
+                        }
+                        return null;
+                      },
+                      controller: controller.foodInputController,
+                      decoration: InputDecoration(
+                        //hintText: "Input the foods",
+                        alignLabelWithHint: true,
+                        border: const OutlineInputBorder(),
+                        enabledBorder: OutlineInputBorder(
+                            borderSide: const BorderSide(
+                                width: 1, color: AppColors.brand05),
+                            borderRadius:
+                                BorderRadius.circular(20.0) //<-- SEE HERE
+                            ),
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+            Column(
+              children: [
+                const Text(""),
+                SizedBox(
+                  height: 70.0.h,
+                  child: IconButton(
+                      onPressed: () {
+                        if (controller.amountFormKey.currentState!.validate() &&
+                            controller.nameFormKey.currentState!.validate()) {
+                          controller.getResultFromShortcut();
+                          controller.foodInputController.clear();
+                          controller.amountInputController.clear();
+                        } else {
+                          Get.snackbar(
+                            "Failed",
+                            "Please input corrected value",
+                            icon: const Icon(Icons.warning, color: Colors.red),
+                            snackPosition: SnackPosition.TOP,
+                          );
+                        }
+                        controller.getTotalCalories();
+                      },
+                      icon: const Icon(
+                        Icons.add_box_outlined,
+                        size: 32.0,
+                        color: AppColors.brand05,
+                      )),
+                ),
+              ],
+            )
+          ],
+        ),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Padding(
+              padding: const EdgeInsets.all(10.0),
+              child: Container(
+                  height: 24.h,
+                  width: 24.w,
+                  decoration: BoxDecoration(
+                      color: AppColors.fontMid,
+                      borderRadius: BorderRadius.circular(100)),
+                  child: const Icon(
+                    Icons.question_mark,
+                    size: 16.0,
+                    color: AppColors.white,
+                  )),
+            ),
+            const Expanded(
+              child: Text(
+                "E.g. 2 bowl white rice, 200 gram baked chicken, 2 eggs, 1 bowl salad, 10 gram mayonnaise",
+                style: TextStyle(
+                    color: AppColors.fontMid,
+                    fontFamily: 'OpenSans',
+                    fontWeight: FontWeight.w500),
+              ),
+            )
+          ],
+        ),
+      ],
+    );
+  }
+
+  Widget _tabBarView(BuildContext context) {
+    return Container(
+      height: 150.h,
       child: TabBarView(controller: controller.tabController, children: [
-        _functionAddFood(
-            "Quick add",
-            const AssetImage("assets/icons/scan_food.png"),
-            scanMealFunction,
-            "Scan barcode",
-            const AssetImage("assets/icons/scan_barcode.png"),
-            scanBarCodeFunction),
-        _functionAddFood(
-            "Create a food",
-            const AssetImage("assets/icons/create_food.png"),
-            createFoodFunction,
-            "Discover new food",
-            const AssetImage("assets/icons/discover_food.png"),
-            discoverFunction),
-        _functionAddFood(
-            "Create a meal",
-            const AssetImage("assets/icons/create_meal.png"),
-            createMealFunction,
-            "Discover new meal",
-            const AssetImage("assets/icons/discover_food.png"),
-            discoverFunction),
-        _functionAddFood(
-            "Create a recipe",
-            const AssetImage("assets/icons/create_recipe.png"),
-            createRecipeFunction,
-            "Discover new recipe",
-            const AssetImage("assets/icons/discover_food.png"),
-            discoverFunction),
+        _quickShortcut(context),
+        Container(
+          height: 310.h,
+          decoration: const BoxDecoration(
+              color: AppColors.brand06,
+              image: DecorationImage(
+                  fit: BoxFit.contain,
+                  image: AssetImage("assets/images/add_food_background.png"))),
+          child: Center(
+              child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Container(
+                margin: EdgeInsets.only(bottom: 5.0),
+                height: 48.h,
+                width: 48.w,
+                decoration: BoxDecoration(
+                    color: AppColors.white,
+                    borderRadius: BorderRadius.circular(100)),
+                child: IconButton(
+                  onPressed: () {
+                    showSearch(
+                        context: context, delegate: CustomSearchDelegate());
+                  },
+                  iconSize: 36.0,
+                  color: AppColors.brand05,
+                  icon: const Icon(Icons.manage_search_outlined),
+                ),
+              ),
+              const Text(
+                "Search food",
+                style: TextStyle(
+                    color: AppColors.white,
+                    fontFamily: "Gothic",
+                    fontSize: 14,
+                    fontWeight: FontWeight.bold),
+              ),
+            ],
+          )),
+        ),
+        // _functionAddFood(
+        //     "Quick add",
+        //     const AssetImage("assets/icons/scan_food.png"),
+        //     scanMealFunction,
+        //     "Scan barcode",
+        //     const AssetImage("assets/icons/scan_barcode.png"),
+        //     scanBarCodeFunction),
+
+        // _functionAddFood(
+        //     "Create a food",
+        //     const AssetImage("assets/icons/create_food.png"),
+        //     createFoodFunction,
+        //     "Discover new food",
+        //     const AssetImage("assets/icons/discover_food.png"),
+        //     discoverFunction),
+        // _functionAddFood(
+        //     "Create a meal",
+        //     const AssetImage("assets/icons/create_meal.png"),
+        //     createMealFunction,
+        //     "Discover new meal",
+        //     const AssetImage("assets/icons/discover_food.png"),
+        //     discoverFunction),
+        // _functionAddFood(
+        //     "Create a recipe",
+        //     const AssetImage("assets/icons/create_recipe.png"),
+        //     createRecipeFunction,
+        //     "Discover new recipe",
+        //     const AssetImage("assets/icons/discover_food.png"),
+        //     discoverFunction),
       ]),
     );
+  }
+}
+
+class CustomSearchDelegate extends SearchDelegate {
+  FoodController controller = FoodController();
+  @override
+  List<Widget>? buildActions(BuildContext context) {
+    return [
+      IconButton(
+          onPressed: () {
+            query = "";
+          },
+          icon: const Icon(
+            Icons.clear,
+            color: AppColors.brand05,
+          ))
+    ];
+  }
+
+  @override
+  Widget? buildLeading(BuildContext context) {
+    return IconButton(
+        onPressed: () {
+          close(context, null);
+        },
+        icon: const Icon(
+          Icons.arrow_back_ios,
+          color: AppColors.brand05,
+        ));
+  }
+
+  @override
+  Widget buildResults(BuildContext context) {
+    
+    if (controller.productList.isEmpty ||
+        controller.productQuery.value != query) {
+      controller.getResultFromFinding(query);
+    }
+
+    return Obx(() {
+      if (controller.isLoading.value && controller.startLoading.value) {
+        return const Center(child: CircularProgressIndicator());
+      }
+      return ListView.separated(
+        itemCount: controller.productList.length,
+        itemBuilder: (context, index) {
+          //var string = controller.foodList[index].name.toString();
+          return ListTile(
+            isThreeLine: true,
+            title: Text(
+              controller.productList[index].productName!.toUpperCase(),
+              style: const TextStyle(
+                  fontFamily: "OpenSans",
+                  color: AppColors.brand04,
+                  fontSize: 30),
+            ),
+            subtitle: RichText(
+              text: TextSpan(
+                  style: const TextStyle(fontFamily: "OpenSans"),
+                  children: <TextSpan>[
+                    TextSpan(
+                        text:
+                            "${controller.productList[index].nutriments?.getValue(Nutrient.energyKCal, PerSize.serving)?.toStringAsFixed(1)} calories\n",
+                        style: const TextStyle(
+                          color: AppColors.brand05,
+                          fontWeight: FontWeight.w600,
+                        )),
+                    TextSpan(
+                        text:
+                            "${controller.productList[index].servingQuantity} gram",
+                        style: const TextStyle(
+                          color: AppColors.brand05,
+                          fontWeight: FontWeight.w500,
+                        )),
+                  ]),
+            ),
+            onTap: () {
+              Get.to(
+                  () => AddMealPage(
+                        product: controller.productList[index],
+                      ),
+                  binding: AddMealBinding());
+            },
+            trailing: Wrap(children: [
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.end,
+                children: [
+                  Text(
+                    "${controller.productList[index].nutriments?.getValue(Nutrient.carbohydrates, PerSize.oneHundredGrams)?.toStringAsFixed(1)} carbs",
+                    style: const TextStyle(
+                        color: AppColors.fontMid, fontFamily: "OpenSans"),
+                  ),
+                  Text(
+                    "${controller.productList[index].nutriments?.getValue(Nutrient.proteins, PerSize.oneHundredGrams)?.toStringAsFixed(1)} pros",
+                    style: const TextStyle(
+                        color: AppColors.fontMid, fontFamily: "OpenSans"),
+                  ),
+                  Text(
+                    "${controller.productList[index].nutriments?.getValue(Nutrient.fat, PerSize.oneHundredGrams)?.toStringAsFixed(1)} fats",
+                    style: const TextStyle(
+                        color: AppColors.fontMid, fontFamily: "OpenSans"),
+                  ),
+                ],
+              ),
+            ]),
+          );
+        },
+        separatorBuilder: (BuildContext context, int index) {
+          return const Divider(
+            height: 10,
+            thickness: 1,
+          );
+        },
+      );
+    });
+  }
+
+  SuggestionManager manager = SuggestionManager(TagType.INGREDIENTS,
+      language: OpenFoodFactsLanguage.ENGLISH);
+  @override
+  Widget buildSuggestions(BuildContext context) {
+    return FutureBuilder<List<String>>(
+        future: manager.getSuggestions(query),
+        builder: (context, future) {
+          if (!future.hasData) {
+            return Container();
+          }
+          // Display empty container if the list is empty
+          else {
+            List<String>? list = future.data;
+            return ListView.separated(
+              itemCount: list!.length,
+              itemBuilder: (context, index) {
+                return ListTile(
+                  title: Text(list[index].toString()),
+                  onTap: () {
+                    query = list[index].toString();
+                    showResults(context);
+                  },
+                );
+              },
+              separatorBuilder: (BuildContext context, int index) {
+                return const Divider(
+                  height: 10,
+                  thickness: 1,
+                );
+              },
+            );
+          }
+        });
+    // return ListView.separated(
+    //   //itemCount: lengthOfSuggestion.value,
+
+    //   itemBuilder: (context, index) {
+    //     //var string = controller.foodList[index].name.toString();
+    //     return ListTile(
+    //       title: Text(
+    //         controller.productList[index].productName!.toUpperCase(),
+    //         style: const TextStyle(
+    //             fontFamily: "OpenSans", color: AppColors.brand04, fontSize: 30),
+    //       ),
+    //     );
+    //   },
+    //   separatorBuilder: (BuildContext context, int index) {
+    //     return const Divider(
+    //       height: 10,
+    //       thickness: 1,
+    //     );
+    //   },
+    // );
   }
 }

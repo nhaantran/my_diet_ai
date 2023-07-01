@@ -3,8 +3,10 @@ import 'package:flutter/src/widgets/framework.dart';
 import 'package:get/get.dart';
 import 'package:my_diet/view/home/homepage.dart';
 import 'package:my_diet/view/profile/profilepage.dart';
+import 'package:simple_barcode_scanner/simple_barcode_scanner.dart';
 
 import '../../common/values/colors.dart';
+import '../../common/widgets/toast.dart';
 import '../daily/dailypage.dart';
 import 'applicationcontroller.dart';
 
@@ -33,6 +35,7 @@ class ApplicationPage extends GetView<ApplicationController> {
   }
 
   Widget _buildBottomNavigation(BuildContext context) {
+    Get.put(ApplicationController());
     return Obx(() => BottomNavigationBar(
           items: controller.bottomeTabs,
           iconSize: 36.0,
@@ -86,13 +89,13 @@ class ApplicationPage extends GetView<ApplicationController> {
                         IconButton(
                             onPressed: () {},
                             iconSize: 48.0,
-                            icon: ImageIcon(
+                            icon: const ImageIcon(
                               AssetImage(
                                   "assets/icons/connected_people_function.png"),
                               color: AppColors.neutral,
                               size: 48.0,
                             )),
-                        Text(
+                        const Text(
                           "Connected to people",
                           style: TextStyle(
                               fontSize: 10, fontWeight: FontWeight.w500),
@@ -106,12 +109,12 @@ class ApplicationPage extends GetView<ApplicationController> {
                               controller.addFoodNavigation();
                             },
                             iconSize: 48.0,
-                            icon: ImageIcon(
+                            icon: const ImageIcon(
                               AssetImage("assets/icons/add_food_function.png"),
                               color: AppColors.error,
                               size: 48.0,
                             )),
-                        Text(
+                        const Text(
                           "Add Food",
                           style: TextStyle(
                               fontSize: 10, fontWeight: FontWeight.w500),
@@ -122,8 +125,22 @@ class ApplicationPage extends GetView<ApplicationController> {
                       children: [
                         IconButton(
                             iconSize: 48.0,
-                            onPressed: () {},
-                            icon: ImageIcon(
+                            onPressed: () async {
+                              var res = await Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) =>
+                                        const SimpleBarcodeScannerPage(),
+                                  ));
+                              if (res is String) {
+                                await controller.getBarCode(res);
+                                if(!controller.isProductFounded.value){
+                                   toastInfo(msg: "Sorry, we can't find the product!");
+                                }
+                              }
+
+                            },
+                            icon: const ImageIcon(
                               AssetImage(
                                   "assets/icons/scan_bar_code_function.png"),
                               size: 48.0,

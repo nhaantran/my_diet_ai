@@ -1,5 +1,6 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 
 import '../../../common/values/colors.dart';
@@ -70,11 +71,15 @@ class GenderWelcomePage extends GetView<WelcomeController> {
                     children: [
                       const Text(
                         "Which gender are you assigned at birth?",
+                        textAlign: TextAlign.center,
                         style: TextStyle(
                             color: AppColors.brand02,
                             fontSize: 24,
                             fontFamily: 'Gothic',
                             fontWeight: FontWeight.w900),
+                      ),
+                      SizedBox(
+                        height: 20.0.h,
                       ),
                       SimpleButtonCard(
                         backgroundColor: selectedIndex.value == 0
