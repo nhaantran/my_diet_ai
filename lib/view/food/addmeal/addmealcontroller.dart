@@ -1,13 +1,8 @@
-import 'package:bottom_picker/resources/arrays.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 import 'package:bottom_picker/bottom_picker.dart';
 import 'package:my_diet/common/entities/food.dart';
-import 'package:my_diet/services/remote_service.dart';
 import 'package:openfoodfacts/openfoodfacts.dart';
-
-import '../../../common/routes/names.dart';
 import '../../../common/values/colors.dart';
 import '../foodcontroller.dart';
 

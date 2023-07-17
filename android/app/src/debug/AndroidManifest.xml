@@ -4,8 +4,12 @@
          the Flutter tool needs it to communicate with the running application
          to allow setting breakpoints, to provide hot reload, etc.
     -->
-    <application android:allowBackup="false"/>
-    
+    <application 
+       
+        android:allowBackup="false"
+        
+    />
+    <!-- android:label="My Diet" -->
 
     <uses-permission android:name="android.permission.INTERNET"/>
 </manifest>

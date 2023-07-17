@@ -16,8 +16,6 @@ import '../../view/signin/signinbinding.dart';
 import '../../view/signin/signinpage.dart';
 import '../../view/signup/signupbinding.dart';
 import '../../view/signup/signuppage.dart';
-
-import '../middlewares/router_auth.dart';
 import '../middlewares/router_welcome.dart';
 import 'routes.dart';
 
@@ -29,13 +27,12 @@ class AppPages {
 
   static final List<GetPage> routes = [
     GetPage(
-      name: AppRoutes.INITIAL,
-      page: () => WelcomePage(),
-      binding: WelcomeBinding(),
-      middlewares: [
-        RouteWelcomeMiddleware(priority: 1),
-      ]
-    ),
+        name: AppRoutes.INITIAL,
+        page: () => WelcomePage(),
+        binding: WelcomeBinding(),
+        middlewares: [
+          RouteWelcomeMiddleware(priority: 1),
+        ]),
 
     GetPage(
       name: AppRoutes.SIGN_IN,
@@ -55,7 +52,15 @@ class AppPages {
       fullscreenDialog: true,
       transitionDuration: const Duration(milliseconds: 500),
     ),
-
+    GetPage(
+      name: AppRoutes.WELCOME,
+      page: () => WelcomePage(),
+      binding: WelcomeBinding(),
+      transition: Transition.native,
+      popGesture: false,
+      fullscreenDialog: true,
+      transitionDuration: const Duration(milliseconds: 500),
+    ),
     // // check if needed to login or not
     GetPage(
       name: AppRoutes.Application,

@@ -57,7 +57,7 @@ class _buildDotIndicator extends GetView<WelcomeController> {
               progressColor: AppColors.brand03,
               percent: controller.progressValue.value,
               animateFromLastPercent: true,
-              barRadius: Radius.circular(10),
+              barRadius: const Radius.circular(10),
               animation: true,
               restartAnimation: false,
             ),
@@ -139,12 +139,10 @@ class _buildPageView extends GetView<WelcomeController> {
         KeepAlivePage(
             child: AgeWelcomePage(
           back: () {
-            print("current: " + currentPageIndex.toString());
             currentPageIndex = pageController.page!.round();
             movingPreviousPage(pageController, currentPageIndex);
           },
           onTap: () {
-            print("current: " + currentPageIndex.toString());
             currentPageIndex = pageController.page!.round();
             movingNextPage(pageController, currentPageIndex);
           },
@@ -152,12 +150,10 @@ class _buildPageView extends GetView<WelcomeController> {
         KeepAlivePage(
             child: HeightWelcomePage(
           back: () {
-            print("current: " + currentPageIndex.toString());
             currentPageIndex = pageController.page!.round();
             movingPreviousPage(pageController, currentPageIndex);
           },
           onTap: () {
-            print("current: " + currentPageIndex.toString());
             currentPageIndex = pageController.page!.round();
             movingNextPage(pageController, currentPageIndex);
           },
@@ -165,12 +161,10 @@ class _buildPageView extends GetView<WelcomeController> {
         KeepAlivePage(
             child: CurrentWeightWelcomePage(
           back: () {
-            print("current: " + currentPageIndex.toString());
             currentPageIndex = pageController.page!.round();
             movingPreviousPage(pageController, currentPageIndex);
           },
           onTap: () {
-            print("current: " + currentPageIndex.toString());
             currentPageIndex = pageController.page!.round();
             movingNextPage(pageController, currentPageIndex);
           },
@@ -178,12 +172,10 @@ class _buildPageView extends GetView<WelcomeController> {
         KeepAlivePage(
             child: TargetWeightWelcomePage(
           back: () {
-            print("current: " + currentPageIndex.toString());
             currentPageIndex = pageController.page!.round();
             movingPreviousPage(pageController, currentPageIndex);
           },
           onTap: () {
-            print("current: " + currentPageIndex.toString());
             currentPageIndex = pageController.page!.round();
             movingNextPage(pageController, currentPageIndex);
           },
@@ -191,44 +183,44 @@ class _buildPageView extends GetView<WelcomeController> {
         KeepAlivePage(
             child: ActiveWelcomePage(
           back: () {
-            print("current: " + currentPageIndex.toString());
             currentPageIndex = pageController.page!.round();
             movingPreviousPage(pageController, currentPageIndex);
           },
-          onTap: () {
-            print("current: " + currentPageIndex.toString());
-            currentPageIndex = pageController.page!.round();
-            movingNextPage(pageController, currentPageIndex);
+          onTap: () async{
+            // print("current: " + currentPageIndex.toString());
+            // currentPageIndex = pageController.page!.round();
+            controller.handleSignIn();
+            //movingNextPage(pageController, currentPageIndex);
           },
         )),
-        Container(
-            width: double.infinity,
-            height: double.infinity,
-            child: Stack(
-              alignment: Alignment.bottomCenter,
-              children: [
-                Positioned(
-                  bottom: 90,
-                  child: Column(children: [
-                    Text("qweqweqweqweqwe.\nqweqwe.\nqweqwe"),
-                    ElevatedButton(
-                      onPressed: () {
-                        controller.handleSignIn();
-                      },
-                      style: ButtonStyle(
-                        backgroundColor:
-                            MaterialStateProperty.all(Colors.white),
-                        foregroundColor:
-                            MaterialStateProperty.all(Colors.black),
-                        shape: MaterialStateProperty.all(RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(15))),
-                      ),
-                      child: Text("Log in"),
-                    )
-                  ]),
-                )
-              ],
-            )),
+        // Container(
+        //     width: double.infinity,
+        //     height: double.infinity,
+        //     child: Stack(
+        //       alignment: Alignment.bottomCenter,
+        //       children: [
+        //         Positioned(
+        //           bottom: 90,
+        //           child: Column(children: [
+        //             Text("qweqweqweqweqwe.\nqweqwe.\nqweqwe"),
+        //             ElevatedButton(
+        //               onPressed: () {
+
+        //               },
+        //               style: ButtonStyle(
+        //                 backgroundColor:
+        //                     MaterialStateProperty.all(Colors.white),
+        //                 foregroundColor:
+        //                     MaterialStateProperty.all(Colors.black),
+        //                 shape: MaterialStateProperty.all(RoundedRectangleBorder(
+        //                     borderRadius: BorderRadius.circular(15))),
+        //               ),
+        //               child: Text("Log in"),
+        //             )
+        //           ]),
+        //         )
+        //       ],
+        //     )),
       ],
     );
   }

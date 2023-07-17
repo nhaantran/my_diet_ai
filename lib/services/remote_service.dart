@@ -33,7 +33,7 @@ class RemoteService {
     var client = http.Client();
 
     var url = Uri.parse(
-        "https://api.api-ninjas.com/v1/caloriesburned?activity=${query}&weight=${HomeController().weight.value}&duration=$duration");
+        "https://api.api-ninjas.com/v1/caloriesburned?activity=${query}&weight=${HomeController.weight.value}&duration=$duration");
     var response = await client.get(url, headers: {
       'X-API-Key': 'C2JCb8AqK8A+1OWlEQVH1Q==nELYCot0cFL4LBnD',
     });
@@ -143,12 +143,22 @@ class RemoteService {
       language: OpenFoodFactsLanguage.ENGLISH,
       version: ProductQueryVersion.v3,
     );
+    //   Product newProduct = Product(
+    //     barcode: "0000000000000",
+    //     productName: "Example Product",
+    //     quantity: "200g",
+    //     brands: "Example Brand",
+    //     lang: OpenFoodFactsLanguage.ENGLISH,
+    //     ingredientsText: "Ingredient 1, Ingredient 2, Ingredient 3",
+    //     categories: "Category 1, Category 2"
 
+    // );
+
+    //Status resulttest = await OpenFoodAPIClient.saveProduct(OpenFoodAPIConfiguration.globalUser!, newProduct);
     SearchResult result = await OpenFoodAPIClient.searchProducts(
-      const User(userId: '', password: ''),
+      OpenFoodAPIConfiguration.globalUser!,
       configuration,
     );
-
     return result.products;
   }
 }

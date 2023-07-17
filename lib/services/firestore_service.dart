@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:intl/intl.dart';
+import 'package:my_diet/common/entities/untracked.dart';
 import 'package:my_diet/services/remote_service.dart';
 import 'package:my_diet/view/home/homecontroller.dart';
 
@@ -26,10 +27,12 @@ class FireStoreSerivce {
     var haveCreated = await dateDocRef.get();
     // have already exists
     if (haveCreated.exists) {
-      await dateDocRef.set({
-        "calories_eaten": FieldValue.increment(totalCalories),
-        'calories_remaining': FieldValue.increment(-totalCalories),
-      }, SetOptions(merge: true));
+      if (haveCreated.data()!['calories_remaining'] != null) {
+        await dateDocRef.set({
+          "calories_eaten": FieldValue.increment(totalCalories),
+          'calories_remaining': FieldValue.increment(-totalCalories),
+        }, SetOptions(merge: true));
+      }
     } else {
       // not exists
       await dateDocRef.set({
@@ -71,16 +74,18 @@ class FireStoreSerivce {
     // have already exists
 
     if (haveCreated.exists) {
-      await dateDocRef.set({
-        "calories_exercise": FieldValue.increment(exercise.totalCalories),
-        'calories_remaining': FieldValue.increment(-exercise.totalCalories),
-      }, SetOptions(merge: true));
+      if (haveCreated.data()!['calories_remaining'] != null) {
+        await dateDocRef.set({
+          "calories_exercise": FieldValue.increment(exercise.totalCalories),
+          'calories_remaining': FieldValue.increment(exercise.totalCalories),
+        }, SetOptions(merge: true));
+      }
     } else {
       // not exists
       await dateDocRef.set({
         "calories_exercise": FieldValue.increment(exercise.totalCalories),
         'calories_remaining': HomeController
-                .userHealth!.totalDailyEnergyExpenditure.bmi!.calories.value -
+                .userHealth!.totalDailyEnergyExpenditure.bmi!.calories.value +
             exercise.totalCalories,
       }, SetOptions(merge: true));
     }
@@ -89,6 +94,185 @@ class FireStoreSerivce {
     exerciseCollection.add(exercise.toJson());
   }
 
+  addUntrackedExerciseCalories(UntrackedExercise exercise) async {
+    var dailyMealsColection =
+        db.collection("mealsLog").doc(token).collection("dailyMeals");
+
+    var dateDocRef = dailyMealsColection
+        .doc(DateFormat('dd-MM-yyyy').format(DateTime.now()));
+    // check whether if it existed or not
+    var haveCreated = await dateDocRef.get();
+    // have already exists
+
+    if (haveCreated.exists) {
+      if (haveCreated.data()!['calories_remaining'] != null) {
+        await dateDocRef.set({
+          "calories_exercise_untracked":
+              FieldValue.increment(exercise.calories),
+          'calories_remaining': FieldValue.increment(exercise.calories),
+        }, SetOptions(merge: true));
+      }
+    } else {
+      // not exists
+      await dateDocRef.set({
+        "calories_exercise_untracked": FieldValue.increment(exercise.calories),
+        'calories_remaining': HomeController
+                .userHealth!.totalDailyEnergyExpenditure.bmi!.calories.value +
+            exercise.calories,
+      }, SetOptions(merge: true));
+    }
+
+    var foodsCollection = dateDocRef.collection("untracked_exercises");
+    foodsCollection.add(exercise.toJson());
+  }
+
+  addUntrackedFoodCalories(UntrackedFood food) async {
+    var dailyMealsColection =
+        db.collection("mealsLog").doc(token).collection("dailyMeals");
+
+    var dateDocRef = dailyMealsColection
+        .doc(DateFormat('dd-MM-yyyy').format(DateTime.now()));
+    // check whether if it existed or not
+    var haveCreated = await dateDocRef.get();
+    // have already exists
+
+    if (haveCreated.exists) {
+      if (haveCreated.data()!['calories_remaining'] != null) {
+        await dateDocRef.set({
+          "calories_food_untracked": FieldValue.increment(food.calories),
+          'calories_remaining': FieldValue.increment(-food.calories),
+        }, SetOptions(merge: true));
+      }
+    } else {
+      // not exists
+      await dateDocRef.set({
+        "calories_food_untracked": FieldValue.increment(food.calories),
+        'calories_remaining': HomeController
+                .userHealth!.totalDailyEnergyExpenditure.bmi!.calories.value -
+            food.calories,
+      }, SetOptions(merge: true));
+    }
+
+    var foodsCollection = dateDocRef.collection("untracked_meals");
+    foodsCollection.add(food.toJson());
+  }
+
+  syncDataAfterUpdate(CustomerData userFromFireStore) async {
+    var collectionRef = await db
+        .collection("mealsLog")
+        .doc(token)
+        .collection("dailyMeals")
+        .get();
+    if (collectionRef.docs.isNotEmpty) {
+      for (QueryDocumentSnapshot<Map<String, dynamic>> day
+          in collectionRef.docs) {
+        if (day.data()["calories_remaining"] != null) {
+          var oldGoal = day.data()["calories_remaining"] +
+              (day.data()["calories_eaten"] ?? 0.0) +
+              (day.data()["calories_food_untracked"] ?? 0.0) -
+              (day.data()["calories_exercise"] ?? 0.0) -
+              (day.data()["calories_exercise_untracked"] ?? 0.0);
+         
+          await day.reference.update({
+            "calories_remaining": FieldValue.increment(userFromFireStore
+                    .totalDailyEnergyExpenditure.bmi!.calories.value -
+                oldGoal),
+          });
+          
+        }
+      }
+    }
+  }
+
+  Future<CustomerData?> updateAgeUserHealth(int newAge) async {
+    var userData = await db.collection("usersHealth").doc(token).get();
+    if (userData.exists) {
+      try {
+        var userHealth = CustomerData.fromJson(userData.data()!);
+        // update age here
+        userHealth.age = newAge.toString();
+
+        CustomerData? userFromFireStore = await RemoteService()
+            .postHealthInformation(
+                int.tryParse(userHealth.height) as int,
+                int.tryParse(userHealth.weight) as int,
+                int.tryParse(userHealth.goalWeight) as int,
+                userHealth.age,
+                userHealth.gender,
+                userHealth.goal,
+                userHealth.exercise);
+
+        await userData.reference.update(userFromFireStore!.toJson());
+
+        //sync all the data
+        await syncDataAfterUpdate(userFromFireStore);
+        return userFromFireStore;
+      } catch (e) {
+        print(e);
+        return null;
+      }
+    }
+  }
+  
+  Future<CustomerData?> updateGoalWeightUserHealth(int newWeight) async {
+    var userData = await db.collection("usersHealth").doc(token).get();
+    if (userData.exists) {
+      try {
+        var userHealth = CustomerData.fromJson(userData.data()!);
+        // update weight here
+        userHealth.goalWeight = newWeight.toString();
+
+        CustomerData? userFromFireStore = await RemoteService()
+            .postHealthInformation(
+                int.tryParse(userHealth.height) as int,
+                int.tryParse(userHealth.weight) as int,
+                int.tryParse(userHealth.goalWeight) as int,
+                userHealth.age,
+                userHealth.gender,
+                userHealth.goal,
+                userHealth.exercise);
+
+        await userData.reference.update(userFromFireStore!.toJson());
+
+        //sync all the data
+        await syncDataAfterUpdate(userFromFireStore);
+        return userFromFireStore;
+      } catch (e) {
+        print(e);
+        return null;
+      }
+    }
+  }
+
+  Future<CustomerData?> updateHeightUserHealth(int newHeight) async {
+    var userData = await db.collection("usersHealth").doc(token).get();
+    if (userData.exists) {
+      try {
+        var userHealth = CustomerData.fromJson(userData.data()!);
+        // update weight here
+        userHealth.height = newHeight.toString();
+
+        CustomerData? userFromFireStore = await RemoteService()
+            .postHealthInformation(
+                int.tryParse(userHealth.height) as int,
+                int.tryParse(userHealth.weight) as int,
+                int.tryParse(userHealth.goalWeight) as int,
+                userHealth.age,
+                userHealth.gender,
+                userHealth.goal,
+                userHealth.exercise);
+
+        await userData.reference.update(userFromFireStore!.toJson());
+
+        //sync all the data
+        await syncDataAfterUpdate(userFromFireStore);
+        return userFromFireStore;
+      } catch (e) {
+        print(e);
+        return null;
+      }
+    }
+  }
   Future<CustomerData?> updateWeightUserHealth(int newWeight) async {
     var userData = await db.collection("usersHealth").doc(token).get();
     if (userData.exists) {
@@ -97,44 +281,103 @@ class FireStoreSerivce {
         // update weight here
         userHealth.weight = newWeight.toString();
 
-        CustomerData? userFromFireStore =
-            await RemoteService().postHealthInformation(
+        CustomerData? userFromFireStore = await RemoteService()
+            .postHealthInformation(
                 int.tryParse(userHealth.height) as int,
-
-                //int.tryParse(userHealth.weight) as int,
-                70,
-                60,
-                //int.tryParse(userHealth.goalWeight) as int,
+                int.tryParse(userHealth.weight) as int,
+                int.tryParse(userHealth.goalWeight) as int,
                 userHealth.age,
                 userHealth.gender,
                 userHealth.goal,
                 userHealth.exercise);
 
         await userData.reference.update(userFromFireStore!.toJson());
+
+        //sync all the data
+        await syncDataAfterUpdate(userFromFireStore);
         return userFromFireStore;
       } catch (e) {
         print(e);
+        return null;
       }
     }
-    return null;
   }
 
   Future<List<Food>?> getListOfFood(DateTime date, String session) async {
-    var mealsCollection = await db
+    var mealsCollection = db
         .collection("mealsLog")
         .doc(token)
         .collection("dailyMeals")
         .doc(DateFormat('dd-MM-yyyy').format(date))
         .collection("meals")
-        .doc(session)
-        .collection("foods")
-        .get();
-    if (mealsCollection.docs.isNotEmpty) {
+        .doc(session);
+    var foodsCollection = await mealsCollection.collection("foods").get();
+
+    if (foodsCollection.docs.isNotEmpty) {
       var foodsList = <Food>[];
-      for (int i = 0; i < mealsCollection.docs.length; i++) {
-        foodsList.add(Food.fromJson(mealsCollection.docs[i].data()));
+      for (int i = 0; i < foodsCollection.docs.length; i++) {
+        foodsList.add(Food.fromJson(foodsCollection.docs[i].data()));
       }
       return foodsList;
+    }
+    return [];
+  }
+
+  Future<List<Exercise>?> getListOfExercise(DateTime date) async {
+    var exercisesCollection = await db
+        .collection("mealsLog")
+        .doc(token)
+        .collection("dailyMeals")
+        .doc(DateFormat('dd-MM-yyyy').format(date))
+        .collection("exercises")
+        .get();
+
+    if (exercisesCollection.docs.isNotEmpty) {
+      var exercisesList = <Exercise>[];
+      for (int i = 0; i < exercisesCollection.docs.length; i++) {
+        exercisesList
+            .add(Exercise.fromJson(exercisesCollection.docs[i].data()));
+      }
+      return exercisesList;
+    }
+    return [];
+  }
+
+  Future<List<UntrackedFood>?> getListOfUntrackedFood(DateTime date) async {
+    var untrackedCollection = await db
+        .collection("mealsLog")
+        .doc(token)
+        .collection("dailyMeals")
+        .doc(DateFormat('dd-MM-yyyy').format(date))
+        .collection("untracked_meals")
+        .get();
+    if (untrackedCollection.docs.isNotEmpty) {
+      var untrackedFoodsList = <UntrackedFood>[];
+      for (int i = 0; i < untrackedCollection.docs.length; i++) {
+        untrackedFoodsList
+            .add(UntrackedFood.fromJson(untrackedCollection.docs[i].data()));
+      }
+      return untrackedFoodsList;
+    }
+    return [];
+  }
+
+  Future<List<UntrackedExercise>?> getListOfUntrackedExercise(
+      DateTime date) async {
+    var untrackedCollection = await db
+        .collection("mealsLog")
+        .doc(token)
+        .collection("dailyMeals")
+        .doc(DateFormat('dd-MM-yyyy').format(date))
+        .collection("untracked_exercises")
+        .get();
+    if (untrackedCollection.docs.isNotEmpty) {
+      var untrackedFoodsList = <UntrackedExercise>[];
+      for (int i = 0; i < untrackedCollection.docs.length; i++) {
+        untrackedFoodsList.add(
+            UntrackedExercise.fromJson(untrackedCollection.docs[i].data()));
+      }
+      return untrackedFoodsList;
     }
     return [];
   }
@@ -170,12 +413,17 @@ class FireStoreSerivce {
         .collection("dailyMeals")
         .doc(DateFormat('dd-MM-yyyy').format(date))
         .get();
+    var caloriesEaten = 0.0;
+    var caloriesUntracked = 0.0;
     if (mealsData.exists) {
       if (mealsData.data()!['calories_eaten'] != null) {
-        return mealsData.data()!['calories_eaten'];
+        caloriesEaten = mealsData.data()!['calories_eaten'];
+      }
+      if (mealsData.data()!['calories_food_untracked'] != null) {
+        caloriesUntracked = mealsData.data()!['calories_food_untracked'];
       }
     }
-    return 0.0;
+    return caloriesEaten + caloriesUntracked;
   }
 
   Future<int> getCaloriesExercise(DateTime date) async {
@@ -185,12 +433,17 @@ class FireStoreSerivce {
         .collection("dailyMeals")
         .doc(DateFormat('dd-MM-yyyy').format(date))
         .get();
+    var caloriesExecise = 0;
+    var caloriesUntracked = 0;
     if (mealsData.exists) {
       if (mealsData.data()!['calories_exercise'] != null) {
-        return mealsData.data()!['calories_exercise'];
+        caloriesExecise = mealsData.data()!['calories_exercise'];
+      }
+      if (mealsData.data()!['calories_exercise_untracked'] != null) {
+        caloriesUntracked = mealsData.data()!['calories_exercise_untracked'];
       }
     }
-    return 0;
+    return caloriesExecise + caloriesUntracked;
   }
 
   Future<int> getStreaksCount() async {
@@ -225,7 +478,7 @@ class FireStoreSerivce {
 
       for (var date in dates) {
         if (previousDate != null) {
-          if (date.difference(previousDate).inDays <= 1) {
+          if (date.difference(currentDate).inDays <= 1) {
             // Date is consecutive with the previous date
             count++;
           } else {
@@ -257,7 +510,9 @@ class FireStoreSerivce {
         .doc(DateFormat('dd-MM-yyyy').format(date))
         .get();
     if (mealsData.exists) {
-      return mealsData.data()!['calories_remaining'];
+      if (mealsData.data()!['calories_remaining'] != null) {
+        return mealsData.data()!['calories_remaining'];
+      }
     }
     return 0.0;
   }
@@ -291,6 +546,106 @@ class FireStoreSerivce {
       await dateDocRef.set({
         "calories_eaten": FieldValue.increment(-caloriesDeletedFood),
         'calories_remaining': FieldValue.increment(caloriesDeletedFood),
+      }, SetOptions(merge: true));
+    }
+  }
+
+  deleteUntrackedFood(UntrackedFood deletedFood) async {
+    var caloriesDeletedFood = 0.0;
+
+    var dateDocRef = db
+        .collection("mealsLog")
+        .doc(token)
+        .collection("dailyMeals")
+        .doc(DateFormat('dd-MM-yyyy').format(DateTime.now()));
+
+    // delete food
+    var foodsCollection = dateDocRef.collection("untracked_meals");
+
+    var querySnapshot = await foodsCollection
+        .where("description", isEqualTo: deletedFood.description)
+        .get();
+
+    for (var document in querySnapshot.docs) {
+      caloriesDeletedFood += document.data()['calories'];
+      document.reference.delete();
+    }
+
+    // update calories for that date
+    // check whether if it existed or not
+    var haveCreated = await dateDocRef.get();
+
+    if (haveCreated.exists) {
+      await dateDocRef.set({
+        "calories_food_untracked": FieldValue.increment(-caloriesDeletedFood),
+        'calories_remaining': FieldValue.increment(caloriesDeletedFood),
+      }, SetOptions(merge: true));
+    }
+  }
+
+  deleteExercise(Exercise deletedExercise) async {
+    var caloriesDeletedExercise = 0.0;
+
+    var dateDocRef = db
+        .collection("mealsLog")
+        .doc(token)
+        .collection("dailyMeals")
+        .doc(DateFormat('dd-MM-yyyy').format(DateTime.now()));
+
+    // delete food
+    var foodsCollection = dateDocRef.collection("exercises");
+
+    var querySnapshot = await foodsCollection
+        .where("name", isEqualTo: deletedExercise.name)
+        .get();
+
+    for (var document in querySnapshot.docs) {
+      caloriesDeletedExercise += document.data()['total_calories'];
+      document.reference.delete();
+    }
+
+    // update calories for that date
+    // check whether if it existed or not
+    var haveCreated = await dateDocRef.get();
+
+    if (haveCreated.exists) {
+      await dateDocRef.set({
+        "calories_exercise": FieldValue.increment(-caloriesDeletedExercise),
+        'calories_remaining': FieldValue.increment(-caloriesDeletedExercise),
+      }, SetOptions(merge: true));
+    }
+  }
+
+  deleteUntrackedExercise(UntrackedExercise deletedExercise) async {
+    var caloriesDeletedExercise = 0.0;
+
+    var dateDocRef = db
+        .collection("mealsLog")
+        .doc(token)
+        .collection("dailyMeals")
+        .doc(DateFormat('dd-MM-yyyy').format(DateTime.now()));
+
+    // delete food
+    var foodsCollection = dateDocRef.collection("untracked_exercises");
+
+    var querySnapshot = await foodsCollection
+        .where("description", isEqualTo: deletedExercise.description)
+        .get();
+
+    for (var document in querySnapshot.docs) {
+      caloriesDeletedExercise += document.data()['calories'];
+      document.reference.delete();
+    }
+
+    // update calories for that date
+    // check whether if it existed or not
+    var haveCreated = await dateDocRef.get();
+
+    if (haveCreated.exists) {
+      await dateDocRef.set({
+        "calories_exercise_untracked  ":
+            FieldValue.increment(-caloriesDeletedExercise),
+        'calories_remaining': FieldValue.increment(-caloriesDeletedExercise),
       }, SetOptions(merge: true));
     }
   }

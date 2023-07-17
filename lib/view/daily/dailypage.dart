@@ -1,20 +1,19 @@
 import 'package:date_picker_timeline/date_picker_widget.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
-import 'package:get/get_state_manager/src/simple/get_view.dart';
-import 'package:my_diet/common/routes/names.dart';
+import 'package:my_diet/common/entities/exercise.dart';
+import 'package:my_diet/common/entities/untracked.dart';
 import 'package:my_diet/view/daily/dailycontroller.dart';
 import 'package:my_diet/view/food/foodbinding.dart';
 import 'package:my_diet/view/food/foodpage.dart';
 import 'package:my_diet/view/home/homecontroller.dart';
-import 'package:my_diet/view/welcome/welcomecontroller.dart';
-
 import '../../common/entities/food.dart';
 import '../../common/values/colors.dart';
-import '../../common/widgets/toast.dart';
 import '../common_widgets/ContentRow.dart';
+import '../exercise/exercisebinding.dart';
+import '../exercise/exercisepage.dart';
+import '../food/foodcontroller.dart';
 
 class DailyPage extends GetView<DailyController> {
   const DailyPage({super.key});
@@ -29,7 +28,7 @@ class DailyPage extends GetView<DailyController> {
         elevation: 0.0,
         backgroundColor: AppColors.monochromatic09,
         title: const Text(
-          "Add Dialy Screen",
+          "Dialy Journey",
           style: TextStyle(
               fontFamily: "OpenSans",
               fontSize: 16,
@@ -64,7 +63,10 @@ class DailyPage extends GetView<DailyController> {
                   trailing: IconButton(
                     icon: const Icon(Icons.add_circle_outline, size: 36.0),
                     onPressed: () {
-                      Get.to(FoodPage("Breakfast"), binding: FoodBinding());
+                      FoodController.initialIndex.value = 0;
+
+                      Get.to(() => FoodPage("Breakfast"),
+                          binding: FoodBinding());
                     },
                   ),
                   tileColor: AppColors.brand05,
@@ -102,8 +104,9 @@ class DailyPage extends GetView<DailyController> {
                           )),
                       onDismissed: (DismissDirection direction) {
                         // method
-                        controller.deleteFoodBreakfast(
-                            DailyController.foodListBreakfast[index]);
+                        controller.deleteFood(
+                            DailyController.foodListBreakfast[index],
+                            "Breakfast");
                         DailyController.foodListBreakfast.removeAt(index);
                       },
                       child: ListTile(
@@ -186,6 +189,8 @@ class DailyPage extends GetView<DailyController> {
                   trailing: IconButton(
                     icon: Icon(Icons.add_circle_outline, size: 36.0),
                     onPressed: () {
+                      FoodController.initialIndex.value = 0;
+
                       Get.to(FoodPage("Lunch"), binding: FoodBinding());
                     },
                   ),
@@ -223,8 +228,8 @@ class DailyPage extends GetView<DailyController> {
                           )),
                       onDismissed: (DismissDirection direction) {
                         // method
-                        controller.deleteFoodBreakfast(
-                            DailyController.foodListLunch[index]);
+                        controller.deleteFood(
+                            DailyController.foodListLunch[index], "Lunch");
                         DailyController.foodListLunch.removeAt(index);
                       },
                       child: ListTile(
@@ -310,6 +315,7 @@ class DailyPage extends GetView<DailyController> {
                         trailing: IconButton(
                           icon: Icon(Icons.add_circle_outline, size: 36.0),
                           onPressed: () {
+                            FoodController.initialIndex.value = 0;
                             Get.to(FoodPage("Dinner"), binding: FoodBinding());
                           },
                         ),
@@ -354,8 +360,8 @@ class DailyPage extends GetView<DailyController> {
                           )),
                       onDismissed: (DismissDirection direction) {
                         // method
-                        controller.deleteFoodBreakfast(
-                            DailyController.foodListDinner[index]);
+                        controller.deleteFood(
+                            DailyController.foodListDinner[index], "Dinner");
                         DailyController.foodListDinner.removeAt(index);
                       },
                       child: ListTile(
@@ -425,7 +431,7 @@ class DailyPage extends GetView<DailyController> {
                 );
               }),
               Container(
-                margin: EdgeInsets.only(bottom: 5.0),
+                margin: EdgeInsets.only(bottom: 10.0),
                 decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(20.0),
                     color: AppColors.brand06),
@@ -438,6 +444,7 @@ class DailyPage extends GetView<DailyController> {
                   trailing: IconButton(
                     icon: Icon(Icons.add_circle_outline, size: 36.0),
                     onPressed: () {
+                      FoodController.initialIndex.value = 0;
                       Get.to(FoodPage("Snack"), binding: FoodBinding());
                     },
                   ),
@@ -475,8 +482,8 @@ class DailyPage extends GetView<DailyController> {
                           )),
                       onDismissed: (DismissDirection direction) {
                         // method
-                        controller.deleteFoodBreakfast(
-                            DailyController.foodListSnack[index]);
+                        controller.deleteFood(
+                            DailyController.foodListSnack[index], "Snack");
                         DailyController.foodListSnack.removeAt(index);
                       },
                       child: ListTile(
@@ -545,6 +552,302 @@ class DailyPage extends GetView<DailyController> {
                   },
                 );
               }),
+              Container(
+                margin: EdgeInsets.only(bottom: 10.0),
+                decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(20.0),
+                    color: AppColors.brand06),
+                child: ListTile(
+                  title: const Text("Exercise",
+                      style: TextStyle(
+                          fontFamily: "Gothic", fontWeight: FontWeight.bold)),
+                  textColor: AppColors.white,
+                  subtitle: const Text("Moving around a little bit?"),
+                  trailing: IconButton(
+                    icon: Icon(Icons.add_circle_outline, size: 36.0),
+                    onPressed: () {
+                      Get.to(() => ExercisePage(), binding: ExerciseBinding());
+                    },
+                  ),
+                  tileColor: AppColors.brand05,
+                  iconColor: AppColors.white,
+                  leading: ClipRRect(
+                    borderRadius: BorderRadius.circular(20.0),
+                    child: Image.asset("assets/icons/exercise.png",
+                        fit: BoxFit.fill),
+                  ),
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(20.0)),
+                ),
+              ),
+              Obx(() {
+                if (controller.isLoading.value &&
+                    controller.startLoading.value) {
+                  return const Center(child: CircularProgressIndicator());
+                }
+                return ListView.separated(
+                  shrinkWrap: true,
+                  physics: const NeverScrollableScrollPhysics(),
+                  itemCount: DailyController.exerciseList.length,
+                  itemBuilder: (context, index) {
+                    //var string = controller.foodList[index].name.toString();
+                    return Dismissible(
+                      key: ValueKey<Exercise>(
+                          DailyController.exerciseList[index]),
+                      background: Container(
+                          alignment: Alignment.centerRight,
+                          padding: const EdgeInsets.only(right: 20.0),
+                          color: Colors.red,
+                          child: const Icon(
+                            Icons.delete,
+                            color: AppColors.white,
+                          )),
+                      onDismissed: (DismissDirection direction) {
+                        // method
+                        controller.deleteExercise(
+                            DailyController.exerciseList[index]);
+                        DailyController.exerciseList.removeAt(index);
+                      },
+                      child: ListTile(
+                        isThreeLine: true,
+                        title: Text(
+                          DailyController.exerciseList[index].name
+                              .toUpperCase(),
+                          style: const TextStyle(
+                              fontFamily: "OpenSans",
+                              color: AppColors.brand04,
+                              fontSize: 30),
+                        ),
+                        subtitle: RichText(
+                          text: TextSpan(
+                              style: const TextStyle(fontFamily: "OpenSans"),
+                              children: <TextSpan>[
+                                TextSpan(
+                                    text:
+                                        "${DailyController.exerciseList[index].totalCalories.toString()} calories\n",
+                                    style: const TextStyle(
+                                      color: AppColors.brand05,
+                                      fontWeight: FontWeight.w600,
+                                    )),
+                                TextSpan(
+                                    text:
+                                        "${DailyController.exerciseList[index].durationMinutes.toString()} min",
+                                    style: const TextStyle(
+                                      color: AppColors.brand05,
+                                      fontWeight: FontWeight.w500,
+                                    )),
+                              ]),
+                        ),
+                      ),
+                    );
+                  },
+                  separatorBuilder: (BuildContext context, int index) {
+                    return const Divider(
+                      height: 10,
+                      thickness: 1,
+                    );
+                  },
+                );
+              }),
+              Container(
+                margin: const EdgeInsets.only(bottom: 10.0),
+                decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(20.0),
+                    color: AppColors.brand06),
+                child: ListTile(
+                  title: const Text("Untracked Calories",
+                      style: TextStyle(
+                          fontFamily: "Gothic", fontWeight: FontWeight.bold)),
+                  textColor: AppColors.white,
+                  subtitle: const Text("It is not easy right?"),
+                  trailing: IconButton(
+                    icon: const Icon(Icons.add_circle_outline, size: 36.0),
+                    onPressed: () {
+                      FoodController.initialIndex.value = 2;
+                      Get.to(FoodPage("Snack"), binding: FoodBinding());
+                    },
+                  ),
+                  tileColor: AppColors.brand05,
+                  iconColor: AppColors.white,
+                  leading: ClipRRect(
+                    borderRadius: BorderRadius.circular(20.0),
+                    child: Image.asset("assets/icons/untracked.png",
+                        fit: BoxFit.fill),
+                  ),
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(20.0)),
+                ),
+              ),
+              Obx(() {
+                if (controller.isLoading.value &&
+                    controller.startLoading.value) {
+                  return const Center(child: CircularProgressIndicator());
+                }
+                return Column(
+                  children: [
+                    ListView.separated(
+                      shrinkWrap: true,
+                      physics: const NeverScrollableScrollPhysics(),
+                      itemCount: DailyController.untrackedFoodList.length,
+                      itemBuilder: (context, index) {
+                        //var string = controller.foodList[index].name.toString();
+                        return Dismissible(
+                          key: ValueKey<UntrackedFood>(
+                              DailyController.untrackedFoodList[index]),
+                          background: Container(
+                              alignment: Alignment.centerRight,
+                              padding: const EdgeInsets.only(right: 20.0),
+                              color: Colors.red,
+                              child: const Icon(
+                                Icons.delete,
+                                color: AppColors.white,
+                              )),
+                          onDismissed: (DismissDirection direction) {
+                            // method
+                            controller.deleteUntrackedFood(
+                                DailyController.untrackedFoodList[index]);
+                            DailyController.untrackedFoodList.removeAt(index);
+                          },
+                          child: ListTile(
+                            // isThreeLine: true,
+                            title: Text(
+                              DailyController
+                                  .untrackedFoodList[index].description
+                                  .toUpperCase(),
+                              style: const TextStyle(
+                                  fontFamily: "OpenSans",
+                                  color: AppColors.brand04,
+                                  fontSize: 30),
+                            ),
+                            subtitle: RichText(
+                              text: TextSpan(
+                                  style:
+                                      const TextStyle(fontFamily: "OpenSans"),
+                                  children: <TextSpan>[
+                                    TextSpan(
+                                        text:
+                                            "${DailyController.untrackedFoodList[index].calories.toString()} calories\n",
+                                        style: const TextStyle(
+                                          color: AppColors.brand05,
+                                          fontWeight: FontWeight.w600,
+                                        )),
+                                    // TextSpan(
+                                    //     text:
+                                    //         "${DailyController.foodListSnack[index].servingSizeG.toString()} gram",
+                                    //     style: const TextStyle(
+                                    //       color: AppColors.brand05,
+                                    //       fontWeight: FontWeight.w500,
+                                    //     )),
+                                  ]),
+                            ),
+                            // trailing: Wrap(children: [
+                            //   Column(
+                            //     crossAxisAlignment: CrossAxisAlignment.end,
+                            //     children: [
+                            //       Text(
+                            //         "${DailyController.foodListSnack[index].carbohydratesTotalG.toStringAsFixed(1)} carbs",
+                            //         style: const TextStyle(
+                            //             color: AppColors.fontMid,
+                            //             fontFamily: "OpenSans"),
+                            //       ),
+                            //       Text(
+                            //         "${DailyController.foodListSnack[index].proteinG.toStringAsFixed(1)} pros",
+                            //         style: const TextStyle(
+                            //             color: AppColors.fontMid,
+                            //             fontFamily: "OpenSans"),
+                            //       ),
+                            //       Text(
+                            //         "${DailyController.foodListSnack[index].fatTotalG.toStringAsFixed(1)} fats",
+                            //         style: const TextStyle(
+                            //             color: AppColors.fontMid,
+                            //             fontFamily: "OpenSans"),
+                            //       ),
+                            //     ],
+                            //   ),
+                            // ]),
+                          ),
+                        );
+                      },
+                      separatorBuilder: (BuildContext context, int index) {
+                        return const Divider(
+                          height: 10,
+                          thickness: 1,
+                        );
+                      },
+                    ),
+                    const Divider(
+                      height: 1,
+                      thickness: 2.0,
+                    ),
+                    ListView.separated(
+                      shrinkWrap: true,
+                      physics: const NeverScrollableScrollPhysics(),
+                      itemCount: DailyController.untrackedExerciseList.length,
+                      itemBuilder: (context, index) {
+                        //var string = controller.foodList[index].name.toString();
+                        return Dismissible(
+                          key: ValueKey<UntrackedExercise>(
+                              DailyController.untrackedExerciseList[index]),
+                          background: Container(
+                              alignment: Alignment.centerRight,
+                              padding: const EdgeInsets.only(right: 20.0),
+                              color: Colors.red,
+                              child: const Icon(
+                                Icons.delete,
+                                color: AppColors.white,
+                              )),
+                          onDismissed: (DismissDirection direction) {
+                            // method
+                            controller.deleteUntrackedExercise(
+                                DailyController.untrackedExerciseList[index]);
+                            DailyController.untrackedExerciseList
+                                .removeAt(index);
+                          },
+                          child: ListTile(
+                            // isThreeLine: true,
+                            title: Text(
+                              DailyController
+                                  .untrackedExerciseList[index].description
+                                  .toUpperCase(),
+                              style: const TextStyle(
+                                  fontFamily: "OpenSans",
+                                  color: AppColors.brand04,
+                                  fontSize: 30),
+                            ),
+                            subtitle: RichText(
+                              text: TextSpan(
+                                  style:
+                                      const TextStyle(fontFamily: "OpenSans"),
+                                  children: <TextSpan>[
+                                    TextSpan(
+                                        text:
+                                            "${DailyController.untrackedExerciseList[index].calories.toString()} calories\n",
+                                        style: const TextStyle(
+                                          color: AppColors.brand05,
+                                          fontWeight: FontWeight.w600,
+                                        )),
+                                    TextSpan(
+                                        text:
+                                            "${DailyController.untrackedExerciseList[index].duration.toString()} min",
+                                        style: const TextStyle(
+                                          color: AppColors.brand05,
+                                          fontWeight: FontWeight.w500,
+                                        )),
+                                  ]),
+                            ),
+                          ),
+                        );
+                      },
+                      separatorBuilder: (BuildContext context, int index) {
+                        return const Divider(
+                          height: 10,
+                          thickness: 1,
+                        );
+                      },
+                    ),
+                  ],
+                );
+              }),
             ]),
           )
         ]),
@@ -573,22 +876,24 @@ class DailyPage extends GetView<DailyController> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       _caloriesColumn(
-                          controller.baseGoal.value.toStringAsFixed(1),
+                          DailyController.baseGoal.value.toStringAsFixed(1),
                           // WelcomeController.user!.basalMetabolicRate.hb.calories.value.toInt()
                           //     .toString(),
                           "Goal"),
                       _caloriesColumn("-", ""),
                       _caloriesColumn(
-                          controller.foodCalories.value.toStringAsFixed(1),
+                          DailyController.foodCalories.value.toStringAsFixed(1),
                           "Food"),
-                      _caloriesColumn("-", ""),
+                      _caloriesColumn("+", ""),
                       _caloriesColumn(
-                          controller.exerciseCalories.value.toStringAsFixed(1),
+                          DailyController.exerciseCalories.value
+                              .toStringAsFixed(1),
                           "Exercise"),
                       _caloriesColumn("=", ""),
                       _caloriesColumn(
                           //"${WelcomeController.user!.basalMetabolicRate.hb.calories.value.toInt() - homeController.caloriesFood.value}",
-                          controller.remainingCalories.value.toStringAsFixed(1),
+                          DailyController.remainingCalories.value
+                              .toStringAsFixed(1),
                           "Remaining"),
                     ]),
               )
@@ -658,10 +963,10 @@ class DailyPage extends GetView<DailyController> {
 
   Widget _datePicker() {
     return DatePicker(
-      DateTime.now().subtract(const Duration(days: 2)),
+      DateTime.now().subtract(const Duration(days: 4)),
       width: 65.w,
       height: 80.h,
-      daysCount: 7,
+      daysCount: 9,
       initialSelectedDate: DateTime.now(),
       selectionColor: AppColors.neutral,
       //selectedTextColor: AppColors.fontDark,

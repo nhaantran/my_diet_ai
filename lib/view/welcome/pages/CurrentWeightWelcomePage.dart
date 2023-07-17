@@ -48,9 +48,10 @@ class CurrentWeightWelcomePage extends GetView<WelcomeController> {
                     backgroundColor: AppColors.brand05,
                     onPressed: () {
                       onTap();
+                      controller.setRulerValue();
                     },
-                    child: Icon(Icons.arrow_forward_ios),
                     foregroundColor: AppColors.white,
+                    child: const Icon(Icons.arrow_forward_ios),
                   ),
                 )
               ],
@@ -86,7 +87,7 @@ class CurrentWeightWelcomePage extends GetView<WelcomeController> {
                           controller: rulerPickerController!,
                           beginValue: 40,
                           endValue: 200,
-                          initValue: controller.weight.value,
+                          initValue: WelcomeController.weight.value,
                           onBuildRulerScalueText: (index, scaleValue) {
                             return scaleValue.toString();
                           },
@@ -127,7 +128,7 @@ class CurrentWeightWelcomePage extends GetView<WelcomeController> {
                     height: 40.0,
                   ),
                   Text(
-                    "${controller.weight} kg",
+                    "${WelcomeController.weight} kg",
                     style: const TextStyle(
                         color: AppColors.brand03,
                         fontWeight: FontWeight.bold,

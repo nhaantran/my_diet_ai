@@ -74,12 +74,15 @@ class SignInController extends GetxController {
               .collection("usersHealth")
               .doc(id)
               .set(WelcomeController.user!.toJson());
-              await db
-              .collection("usersHealth")
-              .doc(id)
-              .update({
-                "waterIntake": num.parse((double.parse(WelcomeController.user!.weight) * Formula.WATER_INTAKE).toStringAsFixed(1)),
-              });
+          await db
+          .collection("usersHealth")
+          .doc(id)
+          .update({
+            "waterIntake": num.parse(
+                (double.parse(WelcomeController.user!.weight) *
+                        Formula.WATER_INTAKE)
+                    .toStringAsFixed(1)),
+          });
         }
 
         toastInfo(msg: "Login Success");
@@ -91,6 +94,84 @@ class SignInController extends GetxController {
       print("ERROR: " + e.toString());
     }
   }
+  // Future<void> handleSignIn() async {
+  //   try {
+  //     var user = await _googleSignIn.signIn();
+  //     if (user != null) {
+  //       if (WelcomeController.user != null) {
+  //         final gAuthentication = await user.authentication;
+  //         final credential = GoogleAuthProvider.credential(
+  //             idToken: gAuthentication.idToken,
+  //             accessToken: gAuthentication.accessToken);
+
+  //         await FirebaseAuth.instance.signInWithCredential(credential);
+
+  //         String displayName = user.displayName ?? user.email;
+  //         String email = user.email;
+  //         String id = user.id;
+  //         String photoUrl = user.photoUrl ?? "";
+  //         UserLoginResponseEntity userProfile = UserLoginResponseEntity();
+  //         userProfile.email = email;
+  //         userProfile.accessToken = id;
+  //         userProfile.displayName = displayName;
+  //         userProfile.photoUrl = photoUrl;
+
+  //         UserStore.to.saveProfile(userProfile);
+  //         var userbase = await db
+  //             .collection("users")
+  //             .withConverter(
+  //               fromFirestore: UserData.fromFirestore,
+  //               toFirestore: (UserData userdata, options) =>
+  //                   userdata.toFirestore(),
+  //             )
+  //             .where("id", isEqualTo: id)
+  //             .get();
+
+  //         if (userbase.docs.isEmpty) {
+  //           final data = UserData(
+  //               id: id,
+  //               name: displayName,
+  //               email: email,
+  //               photourl: photoUrl,
+  //               location: "",
+  //               fcmtoken: "",
+  //               addtime: Timestamp.now());
+  //           //WelcomeController.user!.id = id;
+
+  //           await db
+  //               .collection("users")
+  //               .withConverter(
+  //                 fromFirestore: UserData.fromFirestore,
+  //                 toFirestore: (UserData userdata, options) =>
+  //                     userdata.toFirestore(),
+  //               )
+  //               .add(data);
+
+  //           await db
+  //               .collection("usersHealth")
+  //               .doc(id)
+  //               .set(WelcomeController.user!.toJson());
+  //           await db.collection("usersHealth").doc(id).update({
+  //             "waterIntake": num.parse(
+  //                 (double.parse(WelcomeController.user!.weight) *
+  //                         Formula.WATER_INTAKE)
+  //                     .toStringAsFixed(1)),
+  //           });
+  //         }
+
+  //         toastInfo(msg: "Login Success");
+  //         await ConfigStore.to.saveAlreadyOpen();
+  //         Get.offAndToNamed(AppRoutes.Application);
+  //       } else {
+  //         Get.offAndToNamed(AppRoutes.WELCOME);
+  //         print("WHAT THE NULL");
+  //       }
+  //     }
+  //   } catch (e) {
+  //     toastInfo(msg: "Login Failed");
+  //     print("ERROR: " + e.toString());
+  //   }
+  // }
 
   @override
   void onReady() {

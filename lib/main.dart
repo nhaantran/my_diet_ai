@@ -21,8 +21,8 @@ Future<void> main() async {
     options: DefaultFirebaseOptions.currentPlatform,
   );
   OpenFoodAPIConfiguration.globalUser = const User(
-    userId: 'myUsername',
-    password: 'myPassword',
+    userId: 'nhaantran',
+    password: 'thanhNHAN2002',
   );
   OpenFoodAPIConfiguration.globalLanguages = <OpenFoodFactsLanguage>[
     OpenFoodFactsLanguage.ENGLISH,

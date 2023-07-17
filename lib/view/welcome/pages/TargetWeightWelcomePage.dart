@@ -16,8 +16,7 @@ class TargetWeightWelcomePage extends GetView<WelcomeController> {
     required this.onTap,
     required this.back,
   });
-  final RulerPickerController? rulerPickerController =
-      RulerPickerController(value: 80);
+
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
@@ -80,15 +79,15 @@ class TargetWeightWelcomePage extends GetView<WelcomeController> {
                     height: 40.0,
                   ),
                   Padding(
-                      padding: EdgeInsets.all(0.0),
+                      padding: const EdgeInsets.all(0.0),
                       child: Obx(
                         () => RulerPicker(
                           rulerBackgroundColor:
                               AppColors.brand07.withOpacity(0.3),
-                          controller: rulerPickerController!,
-                          beginValue: controller.beginValue,
-                          endValue: controller.endValue,
-                          initValue: controller.weight.value,
+                          controller: controller.rulerPickerController.value,
+                          beginValue: WelcomeController.beginValue.value,
+                          endValue: WelcomeController.endValue.value,
+                          initValue: WelcomeController.weight.value,
                           onBuildRulerScalueText: (index, scaleValue) {
                             return scaleValue.toString();
                           },
@@ -129,7 +128,7 @@ class TargetWeightWelcomePage extends GetView<WelcomeController> {
                     height: 40.0,
                   ),
                   Text(
-                    "${controller.weight} kg",
+                    "${WelcomeController.goalWeight} kg",
                     style: const TextStyle(
                         color: AppColors.brand03,
                         fontWeight: FontWeight.bold,

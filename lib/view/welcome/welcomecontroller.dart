@@ -1,12 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_ruler_picker/flutter_ruler_picker.dart';
 import 'package:get/get.dart';
-import 'package:my_diet/services/firestore_service.dart';
-
 import '../../common/entities/userhealt.dart';
 import '../../common/routes/names.dart';
 import '../../common/values/goal.dart';
 import '../../common/values/exercise.dart';
-
 import '../../services/remote_service.dart';
 
 class WelcomeController extends GetxController {
@@ -18,12 +16,12 @@ class WelcomeController extends GetxController {
   var exercise = Exercise.moderate.obs;
   var progressValue = 0.0.obs;
   var height = 170.obs;
-  var goalWeight = 80.obs;
-  var weight = 75.obs;
-  dynamic beginValue;
-  dynamic endValue;
+  static var goalWeight = 80.obs;
+  static var weight = 75.obs;
+  static var beginValue = 0.obs;
+  static var endValue = 0.obs;
   final TextEditingController ageInputController = TextEditingController();
-
+  var rulerPickerController = RulerPickerController().obs;
   static CustomerData? user;
 
   @override
@@ -34,30 +32,31 @@ class WelcomeController extends GetxController {
   }
 
   setRulerValue() {
+    goalWeight.value = weight.value;
+    rulerPickerController.value = RulerPickerController(value: weight.value);
     if (goal.value == Goal.loseWeight) {
-      beginValue = 40;
-      endValue = weight.value;
+      beginValue.value = 40;
+      endValue.value = weight.value;
     } else if (goal.value == Goal.gainWeight) {
-      beginValue = weight.value;
-      endValue = 200;
+      beginValue.value = weight.value;
+      endValue.value = 200;
     } else {
-      beginValue = weight.value - 5;
-      endValue = weight.value + 5;
+      beginValue.value = weight.value - 5;
+      endValue.value = weight.value + 5;
     }
   }
 
   changePage(int index) async {
     this.index.value = index;
-    progressValue.value = index / 10;
+    progressValue.value = index / 8;
   }
 
   changeWeight(int index) async {
     weight.value = index;
-    setRulerValue();
   }
 
   changeGoalWeight(int index) async {
-    weight.value = index;
+    goalWeight.value = index;
   }
 
   changeHeight(int value) async {

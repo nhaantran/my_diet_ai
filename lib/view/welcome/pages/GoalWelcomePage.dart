@@ -8,15 +8,6 @@ import '../welcomecontroller.dart';
 import '../welcomepage.dart';
 import '../widgets/WelcomeCard.dart';
 
-enum DietPlan {
-  fatloss_moderate,
-  fatloss_aggressive,
-  fatloss_reckless,
-  maintenance,
-  bulking_slow,
-  bulking_normal,
-  bulking_aggressive
-}
 
 class GoalWelcomePage extends GetView<WelcomeController> {
   final VoidCallback onTap;

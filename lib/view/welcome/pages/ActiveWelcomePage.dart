@@ -49,7 +49,7 @@ class ActiveWelcomePage extends GetView<WelcomeController> {
                 visible: selectedIndex != 4,
                 child: FloatingActionButton(
                   backgroundColor: AppColors.brand05,
-                  onPressed: () {
+                  onPressed: ()async {
                     onTap();
                   },
                   child: Icon(Icons.arrow_forward_ios),

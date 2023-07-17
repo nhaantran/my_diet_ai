@@ -8,6 +8,7 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_ruler_picker/flutter_ruler_picker.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:my_diet/common/widgets/toast.dart';
 import 'package:my_diet/services/firestore_service.dart';
 import 'package:my_diet/view/welcome/welcomecontroller.dart';
 import 'package:percent_indicator/linear_percent_indicator.dart';
@@ -144,7 +145,7 @@ class HomePage extends GetView<HomeController> {
   }
 
   Widget _updateWeight() {
-    final RulerPickerController? rulerPickerController =
+    final RulerPickerController rulerPickerController =
         RulerPickerController(value: 150);
     return Obx(() => Material(
         elevation: 2,
@@ -152,7 +153,7 @@ class HomePage extends GetView<HomeController> {
         shadowColor: AppColors.white,
         borderRadius: BorderRadius.circular(20),
         child: Container(
-            padding: EdgeInsets.all(20.0),
+            padding: const EdgeInsets.all(20.0),
             width: 160.w,
             height: 145.h,
             child: Column(
@@ -163,7 +164,7 @@ class HomePage extends GetView<HomeController> {
                         fontSize: 16.w,
                         //color: AppColors.white,
 
-                        color: Color(0xffD3D5F7),
+                        color: const Color(0xffD3D5F7),
                         fontFamily: "Gothic",
                         fontWeight: FontWeight.w600)),
                 RichText(
@@ -171,7 +172,7 @@ class HomePage extends GetView<HomeController> {
                         style: const TextStyle(fontFamily: "Gothic"),
                         children: <TextSpan>[
                       TextSpan(
-                        text: controller.weight.value,
+                        text: HomeController.weight.value,
                         style: const TextStyle(
                             fontSize: 50,
                             //color: AppColors.white,
@@ -203,69 +204,72 @@ class HomePage extends GetView<HomeController> {
                     onPressed: () async {
                       Get.dialog(AlertDialog(
                         title: const Text("Update weight"),
-                        content: Obx(() => Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Padding(
-                                  padding: const EdgeInsets.all(0.0),
-                                  child: RulerPicker(
-                                    controller: rulerPickerController!,
-                                    beginValue: 40,
-                                    endValue: 200,
-                                    initValue:
-                                        int.parse(controller.weight.value),
-                                    onBuildRulerScalueText:
-                                        (index, scaleValue) {
-                                      return scaleValue.toString();
-                                    },
+                        content: Obx(() => SizedBox(
+                              height: 250.h,
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Padding(
+                                    padding: const EdgeInsets.all(0.0),
+                                    child: RulerPicker(
+                                      controller: rulerPickerController,
+                                      beginValue: 40,
+                                      endValue: 200,
+                                      initValue: int.parse(
+                                          HomeController.weight.value),
+                                      onBuildRulerScalueText:
+                                          (index, scaleValue) {
+                                        return scaleValue.toString();
+                                      },
 
-                                    scaleLineStyleList: const [
-                                      ScaleLineStyle(
-                                          color: AppColors.brand07,
-                                          width: 2,
-                                          height: 40,
-                                          scale: 0),
-                                      ScaleLineStyle(
-                                          color: AppColors.brand07,
-                                          width: 1,
-                                          height: 25,
-                                          scale: 5),
-                                      ScaleLineStyle(
-                                          color: AppColors.brand07,
-                                          width: 0,
-                                          height: 0,
-                                          scale: -1),
-                                    ],
-                                    onValueChange: (value) => {
-                                      controller.changeWeight(
-                                        value,
-                                      )
-                                    },
+                                      scaleLineStyleList: const [
+                                        ScaleLineStyle(
+                                            color: AppColors.brand07,
+                                            width: 2,
+                                            height: 40,
+                                            scale: 0),
+                                        ScaleLineStyle(
+                                            color: AppColors.brand07,
+                                            width: 1,
+                                            height: 25,
+                                            scale: 5),
+                                        ScaleLineStyle(
+                                            color: AppColors.brand07,
+                                            width: 0,
+                                            height: 0,
+                                            scale: -1),
+                                      ],
+                                      onValueChange: (value) => {
+                                        controller.changeWeight(
+                                          value,
+                                        )
+                                      },
 
-                                    width: 200,
-                                    height: 100,
-                                    // rulerMarginTop: 8,
-                                    marker: Container(
-                                        width: 8,
-                                        height: 50,
-                                        decoration: BoxDecoration(
-                                            color: AppColors.brand05
-                                                .withOpacity(0.7),
-                                            borderRadius:
-                                                BorderRadius.circular(5))),
+                                      width: 200,
+                                      height: 100,
+                                      // rulerMarginTop: 8,
+                                      marker: Container(
+                                          width: 8,
+                                          height: 50,
+                                          decoration: BoxDecoration(
+                                              color: AppColors.brand05
+                                                  .withOpacity(0.7),
+                                              borderRadius:
+                                                  BorderRadius.circular(5))),
+                                    ),
                                   ),
-                                ),
-                                const SizedBox(
-                                  height: 40.0,
-                                ),
-                                Text(
-                                  "${controller.weight} kg",
-                                  style: const TextStyle(
-                                      color: AppColors.brand03,
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 60),
-                                ),
-                              ],
+                                  const SizedBox(
+                                    height: 40.0,
+                                  ),
+                                  Text(
+                                    "${HomeController.weight.value} kg",
+                                    style: const TextStyle(
+                                        color: AppColors.brand03,
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 60),
+                                  ),
+                                ],
+                              ),
                             )),
                         actions: [
                           TextButton(
@@ -273,15 +277,17 @@ class HomePage extends GetView<HomeController> {
                                   style: TextStyle(color: AppColors.error)),
                               onPressed: () {
                                 Get.back();
-                                controller.weight.value =
-                                    controller.currentWeight;
+                                HomeController.weight.value =
+                                    HomeController.currentWeight.value;
                               }),
                           TextButton(
                               child: const Text("Ok"),
-                              onPressed: () {
-                                controller.updateWeight(
-                                    int.parse(controller.weight.value));
+                              onPressed: () async {
                                 Get.back();
+                                toastInfo(msg: "Update weight successful");
+                                await HomeController.updateWeight(
+                                    int.parse(HomeController.weight.value));
+                                await controller.caloriesCount();
                               }),
                         ],
                       ));
@@ -429,7 +435,7 @@ class HomePage extends GetView<HomeController> {
       shadowColor: AppColors.brand06,
       borderRadius: BorderRadius.circular(20),
       child: Container(
-        padding: const EdgeInsets.all(20.0),
+        padding: const EdgeInsets.all(15.0),
         width: 336.w,
         height: 145.h,
         alignment: Alignment.topLeft,
@@ -525,11 +531,13 @@ class HomePage extends GetView<HomeController> {
                 backgroundColor: AppColors.brand05,
                 progressColor: AppColors.white,
                 percent: (HomeController.caloriesFood.value /
-                            HomeController.baseGoal.value) >
+                            (HomeController.baseGoal.value +
+                                HomeController.caloriesExercise.value)) >
                         1
                     ? 1
                     : (HomeController.caloriesFood.value /
-                        HomeController.baseGoal.value),
+                        (HomeController.baseGoal.value +
+                            HomeController.caloriesExercise.value)),
                 //controller.caloriesFood.value / 100,
                 // WelcomeController
                 //     .user!.basalMetabolicRate.hb.calories.value,
