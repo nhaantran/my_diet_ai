@@ -8,10 +8,14 @@ import 'package:my_diet/view/profile/profilepage.dart';
 import 'package:my_diet/view/profile/profilebinding.dart';
 import 'package:my_diet/view/welcome/welcomebinding.dart';
 import 'package:my_diet/view/welcome/welcomepage.dart';
+import '../../view/Contact/Contact/contactbinding.dart';
+import '../../view/Contact/Contact/contactpage.dart';
 import '../../view/application/applicationbinding.dart';
 import '../../view/application/applicationpage.dart';
 import '../../view/food/foodbinding.dart';
 import '../../view/food/foodpage.dart';
+import '../../view/message/chat/chatbinding.dart';
+import '../../view/message/chat/chatpage.dart';
 import '../../view/signin/signinbinding.dart';
 import '../../view/signin/signinpage.dart';
 import '../../view/signup/signupbinding.dart';
@@ -92,20 +96,20 @@ class AppPages {
       page: () => ExercisePage(),
       binding: ExerciseBinding(),
     ),
+    GetPage(
+        name: AppRoutes.Contact,
+        page: () => ContactPage(),
+        binding: ContactBinding()),
+    GetPage(
+        name: AppRoutes.Chat, page: () => ChatPage(), binding: ChatBinding()),
+    // GetPage(
+    //   name: AppRoutes.ChatBot,
+    //   page: () => ChatbotPage(),
+    //   binding: ChatbotBinding(),
+    // )
     // GetPage(
     //     name: AppRoutes.Contact,
     //     page: () => FoodsPage(),
     //     binding: FoodsBinding()),
-/*
-    // 最新路由
-    // 首页
-    GetPage(name: AppRoutes.Contact, page: () => ContactPage(), binding: ContactBinding()),
-    //消息
-    GetPage(name: AppRoutes.Message, page: () => MessagePage(), binding: MessageBinding()),*/
-
-    /*//聊天详情
-    GetPage(name: AppRoutes.Chat, page: () => ChatPage(), binding: ChatBinding()),
-
-    GetPage(name: AppRoutes.Photoimgview, page: () => PhotoImgViewPage(), binding: PhotoImgViewBinding()),*/
   ];
 }
