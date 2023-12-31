@@ -4,7 +4,9 @@ import 'package:my_diet/view/exercise/exercisecontroller.dart';
 import 'package:my_diet/view/food/addmeal/addmealcontroller.dart';
 import 'package:my_diet/view/food/foodcontroller.dart';
 import 'package:my_diet/view/home/homecontroller.dart';
+import 'package:my_diet/view/message/chat/chatindex.dart';
 
+import '../Contact/Contact/contactcontroller.dart';
 import '../profile/profilecontroller.dart';
 import 'applicationcontroller.dart';
 
@@ -19,7 +21,7 @@ class ApplicationBinding implements Bindings {
     Get.lazyPut<AddMealController>(() => AddMealController());
     Get.lazyPut<ExerciseController>(() => ExerciseController());
     Get.lazyPut<ProfileController>(() => ProfileController());
-
-
+    Get.lazyPut<ContactController>(() => ContactController());
+    Get.lazyPut<ChatController>(() => ChatController());
   }
 }

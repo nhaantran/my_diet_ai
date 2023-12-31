@@ -11,7 +11,7 @@ import '../../../common/values/colors.dart';
 
 class AddMealPage extends GetView<AddMealController> {
   final Product? product;
-
+  
   const AddMealPage({
     this.product,
   });

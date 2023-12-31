@@ -1,4 +1,7 @@
+import 'dart:convert';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_ml_model_downloader/firebase_ml_model_downloader.dart';
 import 'package:intl/intl.dart';
 import 'package:my_diet/common/entities/untracked.dart';
 import 'package:my_diet/services/remote_service.dart';
@@ -8,10 +11,14 @@ import '../common/entities/exercise.dart';
 import '../common/entities/food.dart';
 import '../common/entities/userhealt.dart';
 import '../common/store/user.dart';
+import 'package:tflite_flutter/tflite_flutter.dart';
+
+import '../common/values/foodsName.dart';
 
 class FireStoreSerivce {
   final db = FirebaseFirestore.instance;
   final token = UserStore.to.token;
+  final modelDownloader = FirebaseModelDownloader.instance;
 
   addMeal(String session, List<Food> foodList) async {
     var dailyMealsColection =
@@ -172,13 +179,12 @@ class FireStoreSerivce {
               (day.data()["calories_food_untracked"] ?? 0.0) -
               (day.data()["calories_exercise"] ?? 0.0) -
               (day.data()["calories_exercise_untracked"] ?? 0.0);
-         
+
           await day.reference.update({
             "calories_remaining": FieldValue.increment(userFromFireStore
                     .totalDailyEnergyExpenditure.bmi!.calories.value -
                 oldGoal),
           });
-          
         }
       }
     }
@@ -213,7 +219,7 @@ class FireStoreSerivce {
       }
     }
   }
-  
+
   Future<CustomerData?> updateGoalWeightUserHealth(int newWeight) async {
     var userData = await db.collection("usersHealth").doc(token).get();
     if (userData.exists) {
@@ -273,6 +279,7 @@ class FireStoreSerivce {
       }
     }
   }
+
   Future<CustomerData?> updateWeightUserHealth(int newWeight) async {
     var userData = await db.collection("usersHealth").doc(token).get();
     if (userData.exists) {
@@ -360,6 +367,42 @@ class FireStoreSerivce {
       return untrackedFoodsList;
     }
     return [];
+  }
+
+  // deleteFood(Food deletedFood, String session) async {
+  //   var caloriesDeletedFood = 0.0;
+
+  //   var querySnapshot =
+  //       await foodsCollection.where("name", isEqualTo: deletedFood.name).get();
+
+  //   for (var document in querySnapshot.docs) {
+  //     caloriesDeletedFood += document.data()['calories'];
+  //     document.reference.delete();
+  //   }
+  getFood(String name) async {
+    // await addFood(name);
+    var foodsRef = db.collection("foods");
+    var foods = await foodsRef.where("name", isEqualTo: name).get();
+    Map<String, dynamic> foodData = <String, dynamic>{};
+    for (var doc in foods.docs) {
+      foodData = doc.data();
+    }
+    if (foodData.isNotEmpty) {
+      return Food.fromJson(foodData);
+    }
+  }
+
+  addFood(String name) async {
+    var foodsCollection = db.collection("foods");
+
+    var food = Food(
+        name: name,
+        calories: 465,
+        servingSizeG: 1,
+        fatTotalG: 6,
+        proteinG: 19.5,
+        carbohydratesTotalG: 84.75);
+    foodsCollection.add(food.toJson());
   }
 
   Future<List<UntrackedExercise>?> getListOfUntrackedExercise(
@@ -592,7 +635,7 @@ class FireStoreSerivce {
         .collection("dailyMeals")
         .doc(DateFormat('dd-MM-yyyy').format(DateTime.now()));
 
-    // delete food
+    // delete exercise
     var foodsCollection = dateDocRef.collection("exercises");
 
     var querySnapshot = await foodsCollection
@@ -648,5 +691,35 @@ class FireStoreSerivce {
         'calories_remaining': FieldValue.increment(-caloriesDeletedExercise),
       }, SetOptions(merge: true));
     }
+  }
+
+  Future<FirebaseCustomModel> loadModel() async {
+    var modelName = "food_models";
+    var downloadCondition = FirebaseModelDownloadConditions(
+      iosAllowsCellularAccess: true,
+      iosAllowsBackgroundDownloading: false,
+      androidChargingRequired: false,
+      androidWifiRequired: false,
+      androidDeviceIdleRequired: false,
+    );
+    var model = await modelDownloader.getModel(
+        modelName, FirebaseModelDownloadType.localModel, downloadCondition);
+    return model;
+  }
+
+  Future<void> runInference(List<List<List<num>>> imageMatrix) async {
+    // Tensor input [1, 224, 224, 3]
+    final input = [imageMatrix];
+    // Tensor output [1, 1001]
+    final output = [List<int>.filled(1001, 0)];
+
+    var model = await loadModel();
+    final interpreter = await Interpreter.fromFile(model.file);
+
+    // Run inference
+    interpreter.run(input, output);
+
+    // Get first output tensor
+    final result = output.first;
   }
 }

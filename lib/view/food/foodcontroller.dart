@@ -1,10 +1,16 @@
+import 'dart:io';
+import 'dart:developer';
 import 'package:bottom_picker/bottom_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 import 'package:get/get_state_manager/src/simple/get_controllers.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:my_diet/common/entities/food.dart';
+import 'package:image/image.dart' as img;
 import 'package:my_diet/common/entities/untracked.dart';
+import 'package:my_diet/common/values/foodsName.dart';
+import 'package:my_diet/helpers/image_classification_helper.dart';
 import 'package:my_diet/services/firestore_service.dart';
 import 'package:my_diet/services/remote_service.dart';
 import 'package:my_diet/view/daily/dailycontroller.dart';
@@ -26,7 +32,7 @@ class FoodController extends GetxController with SingleGetTickerProviderMixin {
   final TextEditingController amountInputController = TextEditingController();
   final TextEditingController untrackedInputController =
       TextEditingController();
-
+  ImageClassificationHelper? imageClassificationHelper;
   final amountFormKey = GlobalKey<FormState>();
   final nameFormKey = GlobalKey<FormState>();
   final untrackedFormKey = GlobalKey<FormState>();
@@ -42,7 +48,9 @@ class FoodController extends GetxController with SingleGetTickerProviderMixin {
   static var foodList = <Food>[].obs;
   var productList = <Product>[].obs;
   var productQuery = "".obs;
-
+  var imagePath = "".obs;
+  img.Image? image;
+  Map<String, double>? classification;
   var percent = 0.0.obs;
   // FoodController() {
   //   selectedMealTime = mealTime.first.obs;
@@ -51,10 +59,12 @@ class FoodController extends GetxController with SingleGetTickerProviderMixin {
   @override
   void onInit() async {
     super.onInit();
-
+    imageClassificationHelper = ImageClassificationHelper();
     //getData();
-    tabController = TabController(length: 3, vsync: this, initialIndex: initialIndex.value);
+    tabController =
+        TabController(length: 3, vsync: this, initialIndex: initialIndex.value);
     await getCalories(DailyController.selectedDate);
+    await imageClassificationHelper!.initHelper();
   }
 
   void onMealTimeChanged(String value) {
@@ -84,7 +94,7 @@ class FoodController extends GetxController with SingleGetTickerProviderMixin {
     try {
       var input =
           "${amountInputController.text} ${selectedUnit.toString() == "none" ? '' : selectedUnit.toString()} ${foodInputController.text}";
-      print("Input: $input");
+      log("Input: $input");
       var foods = await RemoteService().getFoodsFromShortcut(input);
 
       if (foods != null) {
@@ -96,7 +106,7 @@ class FoodController extends GetxController with SingleGetTickerProviderMixin {
           }
         }
       } else {
-        print('null');
+        log("food = null");
       }
     } finally {
       isLoading(false);
@@ -114,13 +124,28 @@ class FoodController extends GetxController with SingleGetTickerProviderMixin {
 
       if (foods != null) {
         productList.value = foods;
-        // if (productList.isEmpty) {
-        //   productList.value = foods;
-        // } else {
-        //   for (int index = 0; index < foods.length; index++) {
-        //     productList.add(foods[index]);
-        //   }
-        // }
+      }
+    } finally {
+      isLoading(false);
+      startLoading(false);
+      getTotalCalories();
+    }
+  }
+
+  getResultFromImagePicker() async {
+    isLoading(true);
+    startLoading(true);
+    try {
+      var food = await FireStoreSerivce().getFood(productQuery.value);
+      if (food != null) {
+        if (foodList.isEmpty) {
+          var listOfFoods = <Food>[food];
+          foodList.value = listOfFoods;
+        } else {
+          foodList.add(food);
+        }
+      } else {
+        log("food = null");
       }
     } finally {
       isLoading(false);
@@ -220,5 +245,23 @@ class FoodController extends GetxController with SingleGetTickerProviderMixin {
 
   getData() {
     return foodInputController.text;
+  }
+
+  Future pickImageFromGallery() async {
+    var returnedImage =
+        await ImagePicker().pickImage(source: ImageSource.gallery);
+    if (returnedImage != null) {
+      final imageData = File(returnedImage.path).readAsBytesSync();
+      image = img.decodeImage(imageData);
+      //List Key-> MON AN, value-> TY LE
+      classification = await imageClassificationHelper?.inferenceImage(image!);
+      double minDouble = double.negativeInfinity;
+      classification!.forEach((key, value) {
+        if (value > minDouble) {
+          minDouble = value;
+          productQuery.value = key.toString();
+        }
+      });
+    }
   }
 }

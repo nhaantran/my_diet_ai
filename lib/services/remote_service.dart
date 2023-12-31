@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:developer';
 
 import 'package:http/http.dart' as http;
 import 'package:my_diet/common/entities/food.dart';
@@ -111,6 +112,8 @@ class RemoteService {
     }
   }
 
+
+  // thư viện của open food facts
   getFoodfromBarCode(String code) async {
     ProductSearchQueryConfiguration configuration =
         ProductSearchQueryConfiguration(
@@ -160,5 +163,23 @@ class RemoteService {
       configuration,
     );
     return result.products;
+  }
+
+  Future addFoodToOpenFoodFactDatabaseAsync(Product food) async {
+    Product newProduct = Product(
+        barcode: "0000000000000",
+        productName: "Example Product",
+        quantity: "200g",
+        brands: "Example Brand",
+        lang: OpenFoodFactsLanguage.ENGLISH,
+        ingredientsText: "Ingredient 1, Ingredient 2, Ingredient 3",
+        categories: "Category 1, Category 2");
+
+    Status result = await OpenFoodAPIClient.saveProduct(
+        OpenFoodAPIConfiguration.globalUser!, newProduct);
+    if (result.status != 1) {
+      log("An error occured while sending the product : ${result.statusVerbose}");
+      return;
+    }
   }
 }
