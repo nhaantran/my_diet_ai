@@ -1,6 +1,6 @@
 {
-    "name": "my_diet_ai",
-    "short_name": "my_diet_ai",
+    "name": "my_diet",
+    "short_name": "my_diet",
     "start_url": ".",
     "display": "standalone",
     "background_color": "#0175C2",

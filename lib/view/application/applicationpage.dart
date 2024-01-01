@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:get/get.dart';
+import 'package:my_diet/view/Contact/Contact/contactpage.dart';
 import 'package:my_diet/view/home/homepage.dart';
 import 'package:my_diet/view/profile/profilepage.dart';
 import 'package:simple_barcode_scanner/simple_barcode_scanner.dart';
@@ -20,16 +21,17 @@ class ApplicationPage extends GetView<ApplicationController> {
       reverse: false,
       controller: controller.pageController,
       onPageChanged: (index) => {controller.handlePageChanged(index)},
-      physics: NeverScrollableScrollPhysics(),
-      children: [
+      physics: const NeverScrollableScrollPhysics(),
+      children: const [
         HomePage(),
         DailyPage(),
-        Container(),
+        //Container(),
         // Center(
         //   child: Text("4"),
         // ),
-
-        const ProfilePage(),
+        ContactPage(),
+        //ChatbotPage(),
+        ProfilePage(),
       ],
     );
   }
@@ -134,18 +136,18 @@ class ApplicationPage extends GetView<ApplicationController> {
                                   ));
                               if (res is String) {
                                 await controller.getBarCode(res);
-                                if(!controller.isProductFounded.value){
-                                   toastInfo(msg: "Sorry, we can't find the product!");
+                                if (!controller.isProductFounded.value) {
+                                  toastInfo(
+                                      msg: "Sorry, we can't find the product!");
                                 }
                               }
-
                             },
                             icon: const ImageIcon(
                               AssetImage(
                                   "assets/icons/scan_bar_code_function.png"),
                               size: 48.0,
                             )),
-                        Text(
+                        const Text(
                           "Scan bar-code",
                           style: TextStyle(
                               fontSize: 10, fontWeight: FontWeight.w500),
@@ -159,13 +161,13 @@ class ApplicationPage extends GetView<ApplicationController> {
                               controller.addExerciseNavigation();
                             },
                             iconSize: 48.0,
-                            icon: ImageIcon(
+                            icon: const ImageIcon(
                               AssetImage(
                                   "assets/icons/add_exercise_function.png"),
                               color: AppColors.success,
                               size: 48.0,
                             )),
-                        Text(
+                        const Text(
                           "Add Exercise",
                           style: TextStyle(
                               fontSize: 10, fontWeight: FontWeight.w500),
@@ -193,11 +195,11 @@ class ApplicationPage extends GetView<ApplicationController> {
             side: BorderSide(width: 2, color: AppColors.brand06),
             borderRadius: BorderRadius.circular(100)),
         backgroundColor: AppColors.white,
-        child: Icon(
+        foregroundColor: AppColors.brand06,
+        child: const Icon(
           Icons.add,
           size: 36.0,
         ),
-        foregroundColor: AppColors.brand06,
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
     );

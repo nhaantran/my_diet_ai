@@ -35,6 +35,25 @@ class FoodPage extends GetView<FoodController> {
               Get.back();
             },
           ),
+          actions: <Widget>[
+            IconButton(
+              icon: const Icon(Icons.image),
+              color: AppColors.brand05,
+              tooltip: 'Add photo',
+              onPressed: () async {
+                await controller.pickImageFromGallery();
+                await controller.getResultFromImagePicker();
+                // String value = "hello";
+                // controller.classification!.entries.toList()
+                //   ..sort(
+                //     (a, b) => a.value.compareTo(b.value),
+                //   )
+                //   ..reversed.take(1).map((e) => value = e.key.toString());
+                // Get.snackbar(
+                //     "title", controller.classification!.entries.toList().toString());
+              },
+            ),
+          ],
           centerTitle: true,
           title: Obx(
             () => DropdownButtonHideUnderline(
@@ -702,7 +721,6 @@ class FoodPage extends GetView<FoodController> {
                             .validate()) {
                           FocusScope.of(context).requestFocus(FocusNode());
                           controller.openBottomPicker(context);
-                         
                         } else {
                           Get.snackbar(
                             "Failed",

@@ -40,11 +40,11 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return ScreenUtilInit(
         builder: ((context, child) => GetMaterialApp(
-              debugShowCheckedModeBanner: false,
-              theme: ThemeData(fontFamily: 'OpenSans'),
-              title: 'Dialog',
-              initialRoute: AppPages.INITIAL,
-              getPages: AppPages.routes,
-            )));
+          debugShowCheckedModeBanner: false,
+          theme: ThemeData(fontFamily: 'OpenSans'),
+          title: 'Dialog',
+          initialRoute: AppPages.INITIAL,
+          getPages: AppPages.routes,
+          )));
   }
 }
