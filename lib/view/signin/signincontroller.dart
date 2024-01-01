@@ -74,10 +74,7 @@ class SignInController extends GetxController {
               .collection("usersHealth")
               .doc(id)
               .set(WelcomeController.user!.toJson());
-          await db
-          .collection("usersHealth")
-          .doc(id)
-          .update({
+          await db.collection("usersHealth").doc(id).update({
             "waterIntake": num.parse(
                 (double.parse(WelcomeController.user!.weight) *
                         Formula.WATER_INTAKE)

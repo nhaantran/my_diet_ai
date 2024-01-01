@@ -112,7 +112,6 @@ class RemoteService {
     }
   }
 
-
   // thư viện của open food facts
   getFoodfromBarCode(String code) async {
     ProductSearchQueryConfiguration configuration =

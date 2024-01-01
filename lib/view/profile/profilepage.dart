@@ -472,7 +472,8 @@ class ProfilePage extends GetView<ProfileController> {
                                 child: const Text("Ok"),
                                 onPressed: () async {
                                   await HomeController.updateGoalWeight(
-                                      int.parse(HomeController.goalWeight.value));
+                                      int.parse(
+                                          HomeController.goalWeight.value));
                                   Get.back();
                                   toastInfo(msg: "Update goal successful");
                                 }),

@@ -1,4 +1,4 @@
-package com.example.my_diet_ai;
+package com.example.my_diet;
 
 import io.flutter.embedding.android.FlutterActivity;
 

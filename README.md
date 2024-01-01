@@ -1,4 +1,4 @@
-# my_diet_ai
+# my_diet
 
 A new Flutter project.
 

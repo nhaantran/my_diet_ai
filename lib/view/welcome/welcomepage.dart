@@ -186,7 +186,7 @@ class _buildPageView extends GetView<WelcomeController> {
             currentPageIndex = pageController.page!.round();
             movingPreviousPage(pageController, currentPageIndex);
           },
-          onTap: () async{
+          onTap: () async {
             // print("current: " + currentPageIndex.toString());
             // currentPageIndex = pageController.page!.round();
             controller.handleSignIn();

@@ -20,8 +20,6 @@ class ImageClassificationHelper {
   // static const modelPath = 'assets/models/EfficientNet_model.tflite';
   // static const labelsPath = 'assets/models/efficientNet_labels.txt';
 
-
-
   late final Interpreter interpreter;
   late final List<String> labels;
   late final IsolateInference isolateInference;
