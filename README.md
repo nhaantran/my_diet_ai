@@ -5,7 +5,7 @@ A simple nutritional app. Users can log their foods, exercises and track dialy c
 
 We do provide features that intergrated with AI - food recognition and Chatbot.
 
-
+![alt text](https://github.com/nhaantran/my_diet_ai/blob/main/imageSource/my_diet_architecture.png?raw=true)
 
 ## Getting Started
 Follow the steps below to run this Flutter app locally on your machine.
